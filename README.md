@@ -46,7 +46,7 @@ Visit http://localhost:4173. No build or npm install is required. Typography use
 - `portrait-viewer.js`, `portrait.css`: subtle CSS depth and pointer/focus tilt for the homepage portrait, with reduced-motion support.
 - `assets/portrait/`: original photo, transparent silhouette cutout, decorative chalk vectors, and masking instructions. The portrait links to LinkedIn and works without JavaScript or WebGL.
 - `publications.html`: preprints, manuscripts and their status, archive links, and research code.
-- `assets/publications.bib`: full-author BibTeX citations for the five listed works.
+- `assets/publications.bib`: full-author BibTeX citations for the six named works.
 - `assets/cv/`: downloadable English and French CVs, with editable LaTeX sources in `source/`.
 - `math.js`: shared LaTeX rendering for all `.blog-post` articles.
 - `project-models.js`: original 3D adaptations of the Read the Room and Rizome marks, plus the molecular glider logo.
@@ -79,17 +79,21 @@ Paths in `provenance.json` identify files in the original research workspace; th
 
 ## Publications and profile
 
-`publications.html` lists three verified bioRxiv preprints and two additional manuscripts, with full citations in `assets/publications.bib`. Preprint metadata was checked on September 30, 2026 against the bioRxiv API and publisher-deposited Crossref records:
+`publications.html` lists four verified bioRxiv preprints, two additional named manuscripts, and two conference submissions with their titles withheld. Full citations for the six named works are in `assets/publications.bib`. The original three preprints were checked on September 30, 2026 against the bioRxiv API and publisher-deposited Crossref records:
 
 - Immune phenotype: https://api.crossref.org/works/10.64898/2026.09.17.752366
 - DiffDose: https://api.crossref.org/works/10.64898/2026.09.07.749974
 - Latent space differentiation: https://api.crossref.org/works/10.64898/2026.03.04.709512
 
+The RORγ preprint was added on October 7, 2026. Its version 1 posting date and full author order were checked against https://api.biorxiv.org/details/biorxiv/10.64898/2026.10.01.755741 and https://api.crossref.org/works/10.64898/2026.10.01.755741.
+
+The AISTATS 2027 and ICLR 2027 entries retain their author lists and venues, with review status supplied by the author on October 7, 2026. Keep their paper titles, submission links, and identifiers out of public files during anonymous review. They are placeholders on the page and are excluded from the BibTeX download until a public citation is available.
+
 Posting dates follow bioRxiv, which differ by one day from the Mila listing for DiffDose and latent space differentiation. Author names follow deposited paper metadata; the latent-space paper lists Ali Saberi. These are labeled as preprints. Update the page and BibTeX together when adding papers or newer versions.
 
 The author supplied the manuscript review statuses on September 30, 2026: DiffDose is under review at *npj Systems Biology and Applications*, and the QSP explainability manuscript is under review at *npj Precision Oncology*. The latter's title and eleven-author order come from the supplied title-page screenshot; no public archive or DOI is asserted. The nanobody manuscript is retained as withdrawn for intellectual property reasons, with author-confirmed order Philip Roche, Shayan Hajhashemi, Uri David Akavia. Its 2020 date comes from the French CV.
 
-English and French CV PDFs are linked as CV (EN/FR) in every page’s navigation and beneath the publications heading. Both list the same five works and statuses; paper titles remain in their original English, with status labels translated in the French CV. Their sources were adapted from `EN.tex` and `FR.tex` in the supplied `Shayan_Academic_CV.zip`; unrelated variants were not copied into the website. The original archive is preserved. Keep both CV publication sections, PDFs, website entries, and BibTeX in sync when a paper changes status.
+English and French CV PDFs are linked as CV (EN/FR) in every page’s navigation and beneath the publications heading. Both retain the September 30, 2026 list of five works and statuses; the October 7 additions are on the publications page and have not been added to the CVs. Paper titles remain in their original English, with status labels translated in the French CV. Their sources were adapted from `EN.tex` and `FR.tex` in the supplied `Shayan_Academic_CV.zip`; unrelated variants were not copied into the website. The original archive is preserved. Keep both CV publication sections, PDFs, website entries, and BibTeX in sync when a paper changes status.
 
 The homepage and both CVs also list the invited Real-MVP talk at the 2026 SIAM Conference on the Life Sciences (LS26), July 6, 2026, in Cleveland, Ohio. Its title and MS11 minisymposium details follow the [official talk entry](https://meetings.siam.org/sess/dsp_talk.cfm?p=157552) and [session schedule](https://meetings.siam.org/sess/dsp_programsess.cfm?sessioncode=88781). Invited status was confirmed by the author.
 
