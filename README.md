@@ -87,9 +87,11 @@ Paths in `provenance.json` identify files in the original research workspace; th
 
 The RORγ preprint was added on October 7, 2026. Its version 1 posting date and full author order were checked against https://api.biorxiv.org/details/biorxiv/10.64898/2026.10.01.755741 and https://api.crossref.org/works/10.64898/2026.10.01.755741.
 
+The RORγ and systemic immune phenotype papers are grouped under “Auxiliary publications,” after the six main entries and before Patents. Both retain their citations, authors, dates, and links, and remain in the BibTeX download.
+
 The AISTATS 2027 and ICLR 2027 entries retain their author lists and venues, with review status supplied by the author on October 7, 2026. Keep their paper titles, submission links, and identifiers out of public files during anonymous review. They are placeholders on the page and are excluded from the BibTeX download until a public citation is available.
 
-The Patents section uses the PCT request excerpt supplied by the author on October 7, 2026: the hematopoietic stress invention, inventors Shayan Hajhashemi, Jonathan Cools-Lartigue, Benjamin Gordon, and Kim Ma, and applicant Rizome Biotech Inc. “Filed on WIPO” is the author-supplied status. P8341PC00 is labeled as the applicant/agent file reference, not a patent publication or application number. The preview timestamp is not a filing date. Addresses and agent contact details are omitted. Add a public record link and citation once a publication number is available.
+The Patents section uses the PCT request excerpt supplied by the author on October 7, 2026: the hematopoietic stress invention, inventors Shayan Hajhashemi, Jonathan Cools-Lartigue, Benjamin Gordon, and Kim Ma, and applicant Rizome Biotech Inc. “Filed on WIPO” is the author-supplied status. P8341PC00 is labeled as the applicant/agent file reference, not a patent publication or application number. The preview timestamp is not a filing date. Decode Legal Inc. is listed as the patent agent, with its website and the business address, docket email, and telephone supplied in the request. Inventor and applicant addresses remain omitted. Add a public record link and citation once a publication number is available.
 
 Posting dates follow bioRxiv, which differ by one day from the Mila listing for DiffDose and latent space differentiation. Author names follow deposited paper metadata; the latent-space paper lists Ali Saberi. These are labeled as preprints. Update the page and BibTeX together when adding papers or newer versions.
 
