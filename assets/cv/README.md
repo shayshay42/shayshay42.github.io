@@ -7,10 +7,18 @@ sections; publications and the invited SIAM talk were updated on September 30,
 2026. Paper titles remain in English in both versions.
 
 The PDFs use the original EB Garamond layout. English has four pages; French has
-three. Source changes also correct the PDF author and email link, prevent split
+three. Source changes also correct the PDF author, prevent split
 project entries in English, and fix one overflowing French paragraph.
 The original Xovee CV template credits are retained in both sources; its
 [MIT license](source/LICENSE) is included beside them.
+
+The public CVs were rebuilt on October 14, 2026 with the personal phone number
+removed from both sources and PDFs. The email is plain text with `[at]` replacing
+`@` and `[dot]` replacing every dot, without a `mailto:` annotation. This deters
+simple address harvesting but does not prevent all automated collection.
+The site’s download links use a version query to request the rebuilt files.
+Keep these public contact settings
+when rebuilding; do not restore them from an older CV archive.
 
 ## Build
 
