@@ -46,7 +46,7 @@ Visit http://localhost:4173. No build or npm install is required. Typography use
 - `portrait-viewer.js`, `portrait.css`: subtle CSS depth and pointer/focus tilt for the homepage portrait, with reduced-motion support.
 - `assets/portrait/`: original photo, transparent silhouette cutout, decorative chalk vectors, and masking instructions. The portrait links to LinkedIn and works without JavaScript or WebGL.
 - `publications.html`: preprints, manuscripts, patents and their status, archive links, and research code.
-- `assets/publications.bib`: full-author BibTeX citations for the six named works.
+- `assets/publications.bib`: full-author BibTeX citations for nine papers/manuscripts and two presentations.
 - `assets/cv/`: downloadable English and French CVs, with editable LaTeX sources in `source/`.
 - `math.js`: shared LaTeX rendering for all `.blog-post` articles.
 - `project-models.js`: original 3D adaptations of the Read the Room and Rizome marks, plus the molecular glider logo.
@@ -79,27 +79,29 @@ Paths in `provenance.json` identify files in the original research workspace; th
 
 ## Publications and profile
 
-`publications.html` lists four verified bioRxiv preprints, two additional named manuscripts, and two conference submissions with their titles withheld. Full citations for the six named works are in `assets/publications.bib`. The original three preprints were checked on September 30, 2026 against the bioRxiv API and publisher-deposited Crossref records:
+`publications.html` lists nine named works: six research manuscripts/preprints, the retained nanobody manuscript, and two biology papers under “Auxiliary publications.” `assets/publications.bib` includes full author lists for all nine works and citations for both presentations.
 
-- Immune phenotype: https://api.crossref.org/works/10.64898/2026.09.17.752366
-- DiffDose: https://api.crossref.org/works/10.64898/2026.09.07.749974
-- Latent space differentiation: https://api.crossref.org/works/10.64898/2026.03.04.709512
+On October 14, 2026, the author authorized publishing the titles previously withheld during anonymous review and supplied these updates:
 
-The RORγ preprint was added on October 7, 2026. Its version 1 posting date and full author order were checked against https://api.biorxiv.org/details/biorxiv/10.64898/2026.10.01.755741 and https://api.crossref.org/works/10.64898/2026.10.01.755741.
+- WAR: submitted October 7, 2026; under review at AISTATS 2027.
+- Predators, Prey, and Sloppy Parameters (OIL): submitted September 18, 2026; under review at ICLR 2027; Shayan Hajhashemi is a co-first author.
+- Multimodal World Models: Alignment, Prediction, and Control: Mahta Ramezanian-Panahi, Shayan Hajhashemi, Irina Rish; submitted October 7, 2026; under review at AISTATS 2027.
+- DiffDose: submitted September 13, 2026; under review at *npj Systems Biology and Applications*.
+- Latent Space Thermodynamic Model: submitted March 6, 2026; under review at *Nature Computational Science*.
+- QSP explainability: submitted September 11, 2025; under review at *npj Precision Oncology*.
+- RORγ: bioRxiv version 1, October 7, 2026; under review at *Cancer Discovery*.
+- Systemic immune phenotype: bioRxiv version 1, September 18, 2026.
 
-The RORγ and systemic immune phenotype papers are grouped under “Auxiliary publications,” after the six main entries and before Patents. Both retain their citations, authors, dates, and links, and remain in the BibTeX download.
+Review status and submission dates are author-supplied, not acceptance claims. BioRxiv links and DOI records remain distinct from journal/conference review status. The original preprint metadata was checked against bioRxiv/Crossref on September 30 and October 7, 2026; full deposited author lists remain in the BibTeX export. The nanobody manuscript retains its 2020 date, withdrawn-for-IP status, Jenthera link, and author order Philip Roche, Shayan Hajhashemi, Uri David Akavia.
 
-The AISTATS 2027 and ICLR 2027 entries retain their author lists and venues, with review status supplied by the author on October 7, 2026. Keep their paper titles, submission links, and identifiers out of public files during anonymous review. They are placeholders on the page and are excluded from the BibTeX download until a public citation is available.
+The Patents section uses the author's PCT request excerpt: the hematopoietic stress invention, inventors Shayan Hajhashemi, Jonathan Cools-Lartigue, Benjamin Gordon, and Kim Ma, and applicant Rizome Biotech Inc. “Filed on WIPO” is the author-supplied status. P8341PC00 is the applicant/agent file reference, not a patent publication or application number. The preview timestamp is not a filing date. Decode Legal Inc. is the patent agent; its supplied business contacts remain public, while inventor and applicant addresses are omitted. Add a public record link once a publication number is available.
 
-The Patents section uses the PCT request excerpt supplied by the author on October 7, 2026: the hematopoietic stress invention, inventors Shayan Hajhashemi, Jonathan Cools-Lartigue, Benjamin Gordon, and Kim Ma, and applicant Rizome Biotech Inc. “Filed on WIPO” is the author-supplied status. P8341PC00 is labeled as the applicant/agent file reference, not a patent publication or application number. The preview timestamp is not a filing date. Decode Legal Inc. is listed as the patent agent, with its website and the business address, docket email, and telephone supplied in the request. Inventor and applicant addresses remain omitted. Add a public record link and citation once a publication number is available.
+The English CV now uses the author-approved research-focused layout, emphasizing world models, representation learning, system identification, and control, with all nine works and both presentations. The French CV and its source remain unchanged at the author's explicit request; they retain the earlier bibliography and SIAM presentation. See `assets/cv/README.md` for build instructions. Both public CVs omit the personal phone number and use `[at]` and `[dot]` in the personal email, without a mailto link. CV (EN/FR) links appear in every page's navigation and beneath the publications heading. Keep the English source, PDF, page entries, and BibTeX consistent when metadata changes.
 
-Posting dates follow bioRxiv, which differ by one day from the Mila listing for DiffDose and latent space differentiation. Author names follow deposited paper metadata; the latent-space paper lists Ali Saberi. These are labeled as preprints. Update the page and BibTeX together when adding papers or newer versions.
+The homepage, publications page, and updated English CV list:
 
-The author supplied the manuscript review statuses on September 30, 2026: DiffDose is under review at *npj Systems Biology and Applications*, and the QSP explainability manuscript is under review at *npj Precision Oncology*. The latter's title and eleven-author order come from the supplied title-page screenshot; no public archive or DOI is asserted. The nanobody manuscript is retained as withdrawn for intellectual property reasons, with author-confirmed order Philip Roche, Shayan Hajhashemi, Uri David Akavia. Its 2020 date comes from the French CV.
-
-English and French CV PDFs are linked as CV (EN/FR) in every page’s navigation and beneath the publications heading. Both retain the September 30, 2026 list of five works and statuses; the October 7 additions are on the publications page and have not been added to the CVs. Paper titles remain in their original English, with status labels translated in the French CV. Their sources were adapted from `EN.tex` and `FR.tex` in the supplied `Shayan_Academic_CV.zip`; unrelated variants were not copied into the website. The original archive is preserved. Keep both CV publication sections, PDFs, website entries, and BibTeX in sync when a paper changes status.
-
-The homepage and both CVs also list the invited Real-MVP talk at the 2026 SIAM Conference on the Life Sciences (LS26), July 6, 2026, in Cleveland, Ohio. Its title and MS11 minisymposium details follow the [official talk entry](https://meetings.siam.org/sess/dsp_talk.cfm?p=157552) and [session schedule](https://meetings.siam.org/sess/dsp_programsess.cfm?sessioncode=88781). Invited status was confirmed by the author.
+- **Real-MVP**, invited oral presentation at SIAM Life Sciences, Cleveland, Ohio, July 6, 2026, MS11. The [official talk entry](https://meetings.siam.org/sess/dsp_talk.cfm?p=157552) and [session schedule](https://meetings.siam.org/sess/dsp_programsess.cfm?sessioncode=88781) supply event details; invited status is author-confirmed.
+- **Weak-Form Distillation for Label-Free PDE Inverse Problems**, Cedrique Shum-Tim and Shayan Hajhashemi, accepted oral presentation at [World Modeling for Physics](https://wmw-aspen.github.io/), Aspen Center for Physics, Aspen, Colorado, February 28–March 5, 2027. Acceptance is author-confirmed. It is marked upcoming until the event takes place.
 
 The shared navigation links to Notes, Projects, Publications ([scholar](https://scholar.google.com/citations?hl=en&user=uW3aYOcAAAAJ)), [Mila](https://mila.quebec/en/directory/shayan-hajhashemi), both GitHub profiles ([shayshay42](https://github.com/shayshay42) and [carlangle](https://github.com/carlangle)), and [LinkedIn](https://ca.linkedin.com/in/hshay). The homepage names supervisors [Morgan Craig](https://morgancraiglab.com/about) and [Amin Emad](https://www.ece.mcgill.ca/~aemad2/). The PANDA note is titled “Looking for a bifurcation inside an LLM”; its existing article URL is retained.
 

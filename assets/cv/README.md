@@ -1,42 +1,49 @@
-# Academic CVs
+# Research CVs
 
-`source/EN.tex` and `source/FR.tex` are the English and French CV sources from
-the supplied `Shayan_Academic_CV.zip`. The original archive remains unchanged.
-These sources keep the existing biography, education, employment, and other
-sections; publications and the invited SIAM talk were updated on September 30,
-2026. Paper titles remain in English in both versions.
+`source/EN.tex` is the English research CV approved by Shayan Hajhashemi on
+October 14, 2026. It emphasizes world models, representation learning, system
+identification, and control. The author seeks research internships and full-time
+research roles. Its three-page layout includes nine works and two presentations.
+Submission dates, review statuses, OIL co-first authorship, and the upcoming
+Aspen oral acceptance were supplied by the author.
 
-The PDFs use the original EB Garamond layout. English has four pages; French has
-three. Source changes also correct the PDF author, prevent split
-project entries in English, and fix one overflowing French paragraph.
-The original Xovee CV template credits are retained in both sources; its
-[MIT license](source/LICENSE) is included beside them.
+**The French CV is unchanged at the author's explicit request.** `source/FR.tex`
+and `shayan-hajhashemi-cv-fr.pdf` retain their previous three-page layout,
+bibliography, and SIAM presentation. This release updates only the English CV;
+do not rebuild or replace the French PDF as part of it. Scientific titles remain
+in English in the French version.
 
-The public CVs were rebuilt on October 14, 2026 with the personal phone number
-removed from both sources and PDFs. The email is plain text with `[at]` replacing
-`@` and `[dot]` replacing every dot, without a `mailto:` annotation. This deters
-simple address harvesting but does not prevent all automated collection.
-The site’s download links use a version query to request the rebuilt files.
-Keep these public contact settings
-when rebuilding; do not restore them from an older CV archive.
+Keep the English source, PDF, `publications.html`, homepage talks, and
+`assets/publications.bib` consistent. A later French update requires the author's
+instruction.
+
+The original `Shayan_Academic_CV.zip` remains unchanged. Earlier CV versions
+used the Xovee CV template; its MIT license remains at `source/LICENSE`.
+The English layout follows the approved research draft; the French source retains the earlier template. Private manuscript
+evidence and review notes are not website assets and must not be copied here.
+
+The public sources and PDFs omit the personal phone number. The email uses
+`[at]` and `[dot]` as plain text, with no `mailto:` annotation. Preserve these
+settings when rebuilding. This discourages simple harvesting but is not a
+promise that no bot can recover the address. Versioned download links request
+updated PDFs after a release.
 
 ## Build
 
-Use TeX Live with `latexmk` and pdfLaTeX. Required packages include `cjk`,
-`ebgaramond`, `enumitem`, and `eqparbox`. pdfLaTeX preserves the sources' T1 font
-configuration. No external images or other files from the archive are required.
+Use TeX Live with `latexmk` and pdfLaTeX. Required packages include `ebgaramond`,
+`microtype`, `enumitem`, `titlesec`, `fancyhdr`, `geometry`, and `hyperref` for
+English; the preserved French source also uses `cjk` and `eqparbox`.
+No external images or archive files are required.
 
 Run from the website repository root:
 
 ```sh
-mkdir -p /tmp/shayan-cv-build/en /tmp/shayan-cv-build/fr
+mkdir -p /tmp/shayan-cv-build/en
 latexmk -pdf -interaction=nonstopmode -halt-on-error -no-shell-escape -outdir=/tmp/shayan-cv-build/en assets/cv/source/EN.tex
-latexmk -pdf -interaction=nonstopmode -halt-on-error -no-shell-escape -outdir=/tmp/shayan-cv-build/fr assets/cv/source/FR.tex
 cp /tmp/shayan-cv-build/en/EN.pdf assets/cv/shayan-hajhashemi-cv-en.pdf
-cp /tmp/shayan-cv-build/fr/FR.pdf assets/cv/shayan-hajhashemi-cv-fr.pdf
 ```
 
-Build logs and intermediate files stay outside the repository. Check page
-breaks, publication metadata, DOI links, and the SIAM talk link before replacing
-the published PDFs. Keep publications consistent with `publications.html` and
-`assets/publications.bib` at the repository root.
+Keep build logs and intermediate files outside the repository. Review every
+PDF page for overflow and split entries. Check extracted text, contact privacy,
+PDF annotations, metadata, author order, review status, DOI links, and both talk
+entries before replacing the public PDFs.
