@@ -46,7 +46,7 @@ Visit http://localhost:4173. No build or npm install is required. Typography use
 - `portrait-viewer.js`, `portrait.css`: subtle CSS depth and pointer/focus tilt for the homepage portrait, with reduced-motion support.
 - `assets/portrait/`: original photo, transparent silhouette cutout, decorative chalk vectors, and masking instructions. The portrait links to LinkedIn and works without JavaScript or WebGL.
 - `publications.html`: preprints, manuscripts, patents and their status, archive links, and research code.
-- `assets/publications.bib`: full-author BibTeX citations for ten papers/manuscripts and three presentations.
+- `assets/publications.bib`: full-author BibTeX citations for eleven papers/manuscripts and three presentations.
 - `assets/cv/`: downloadable English and French CVs, with editable LaTeX sources in `source/`.
 - `math.js`: shared LaTeX rendering for all `.blog-post` articles.
 - `project-models.js`: original 3D adaptations of the Read the Room and Rizome marks, plus the molecular glider logo.
@@ -79,7 +79,7 @@ Paths in `provenance.json` identify files in the original research workspace; th
 
 ## Publications and profile
 
-`publications.html` lists ten named works: six research manuscripts/preprints, the retained nanobody manuscript, and three biology papers under “Auxiliary publications.” `assets/publications.bib` includes full author lists for all ten works and citations for all three presentations.
+`publications.html` lists eleven named works: seven research articles/manuscripts (including the WeLD research draft), the retained nanobody manuscript, and three biology papers under “Auxiliary publications.” `assets/publications.bib` includes full author lists for all eleven works and citations for all three presentations.
 
 On October 14, 2026, the author authorized publishing the titles previously withheld during anonymous review and supplied these updates:
 
@@ -96,16 +96,16 @@ Submission and review statuses are author-supplied. Conference submissions remai
 
 The Patents section uses the author's PCT request excerpt: the hematopoietic stress invention, inventors Shayan Hajhashemi, Jonathan Cools-Lartigue, Benjamin Gordon, and Kim Ma, and applicant Rizome Biotech Inc. “Filed on WIPO” is the author-supplied status. P8341PC00 is the applicant/agent file reference, not a patent publication or application number. The preview timestamp is not a filing date. Decode Legal Inc. is the patent agent; its supplied business contacts remain public, while inventor and applicant addresses are omitted. Add a public record link once a publication number is available.
 
-The English CV now uses the author-approved research-focused layout, emphasizing world models, representation learning, system identification, and control, with all ten works and all three presentations. The French CV and its source remain unchanged at the author's explicit request; they retain the earlier bibliography and SIAM presentation. See `assets/cv/README.md` for build instructions. Both public CVs omit the personal phone number and use `[at]` and `[dot]` in the personal email, without a mailto link. CV (EN/FR) links appear in every page's navigation and beneath the publications heading. Keep the English source, PDF, page entries, and BibTeX consistent when metadata changes.
+The English and French CVs use the author-approved research-focused layout, emphasizing world models, representation learning, system identification, and control. The French version was synchronized with the latest hand-edited English source on November 5, 2026 at the author's request. Both include ten works, three presentations, and WeLD as a research project below the cross-modal world-model work. See `assets/cv/README.md` for build instructions. Both public CVs omit the personal phone number and use `[at]` and `[dot]` in the personal email, without a mailto link. CV (EN/FR) links appear in every page's navigation and beneath the publications heading. Keep both CV sources and PDFs, page entries, and BibTeX consistent when metadata changes.
 
-The homepage, publications page, and updated English CV list:
+The homepage, publications page, and both CVs list:
 
 - **Real-MVP**, invited oral presentation at SIAM Life Sciences, Cleveland, Ohio, July 6, 2026, MS11. The [official talk entry](https://meetings.siam.org/sess/dsp_talk.cfm?p=157552) and [session schedule](https://meetings.siam.org/sess/dsp_programsess.cfm?sessioncode=88781) supply event details; invited status is author-confirmed.
 - **Weak-Form Distillation for Label-Free PDE Inverse Problems**, Cedrique Shum-Tim and Shayan Hajhashemi, accepted oral presentation at [World Modeling for Physics](https://wmw-aspen.github.io/), Aspen Center for Physics, Aspen, Colorado, February 28–March 5, 2027. Acceptance is author-confirmed. It is marked upcoming until the event takes place.
 
 The November 5, 2026 update also adds **Cross-modal control in the Virtual Brain**, Mahta Ramezanian-Panahi, Shayan Hajhashemi, and Irina Rish, to the homepage, presentations list, English CV, and BibTeX. The [official MAIN 2026 abstracts](https://www.main2026.org/abstracts) list it as poster 4D in the October 30, 2026 poster session, with Mahta Ramezanian-Panahi as the listed presenter. The [program](https://www.main2026.org/program) confirms HEC Montréal. This is a conference poster presentation, not a journal paper or an invited oral presentation.
 
-The November 5 CV follow-up preserves the author's hand-edited English source and adds **WeLD: label-free weak-form distillation for PDE inference** immediately after the cross-modal world-model project. WeLD is a research draft; template conference labels do not establish submission or acceptance. Only the CV summary is published, not the attached draft manuscript or its sources.
+The November 5 CV follow-up preserves the author's hand-edited English source and adds **WeLD: label-free weak-form distillation for PDE inference** immediately after the cross-modal world-model project. WeLD is a research draft; template conference labels do not establish submission or acceptance. The website now also lists the exact WeLD title and four authors from the attachment, labelled Research draft, with a matching BibTeX entry. The attached manuscript PDF and its source files are not website assets.
 
 The auxiliary publication **Neutrophil Extracellular Trap Deposition Establishes an Immunosuppressive Environment in Non-metastatic Lymph Nodes and Facilitates Heterologous Metastatic Outgrowth** was verified against the [bioRxiv API](https://api.biorxiv.org/details/biorxiv/10.64898/2026.10.23.761387) and [Crossref record](https://api.crossref.org/works/10.64898%2F2026.10.23.761387): version 1, October 28, 2026, nine authors in deposited order. It is listed as a preprint without an inferred journal review status. Scholar was inaccessible during the update; the primary records establish this addition.
 

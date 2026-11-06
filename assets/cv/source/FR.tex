@@ -1,304 +1,181 @@
-% LaTeX Curriculum Vitae
-% Author: Xovee Xu (https://xovee.cn)
-% Last Update: Feb 1, 2024
-% Latest Version (consider give me a star!): https://github.com/Xovee/latex-cv
-% Overleaf Link: https://www.overleaf.com/latex/templates/xovees-cv-template/rrsmqwhbygcf
-% Current Version: v0.96
-% LICENSE: MIT
-
-
-\documentclass{article}
-
+% CV de recherche. Dates, statuts et contributions mis à jour par l'auteur le 5 novembre 2026.
+% Mise en page du CV de recherche approuvé; titres bibliographiques publiés avec l'autorisation de l'auteur.
+\documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[full]{textcomp}
-\usepackage{CJKutf8}
-\usepackage[lf]{ebgaramond}
-% \usepackage[scaled,swashQ]{garamondx}
 \usepackage[T1]{fontenc}
-
+\usepackage[lf]{ebgaramond}
+\usepackage[margin=0.68in,top=0.6in,bottom=0.62in]{geometry}
+\usepackage{microtype}
 \usepackage{enumitem}
-\usepackage[a4paper,left=.9in, right=.9in, top=1.0in, bottom=1.5in]{geometry}
-\usepackage{url}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{amsmath}
-\usepackage{eqparbox}
-
-% package settings
-\usepackage[
-    hidelinks,
-    pdfnewwindow=true,
-    pdfauthor={Shayan Hajhashemi},
-    pdftitle={Curriculum Vitae of Shayan Hajhashemi},
-    pdfpagemode=UseThumbs,
-]{hyperref}
-
-\pagestyle{headings}
-\markright{\textbf{Shayan Hajhashemi}}
-
-\setlength\parindent{2em}
-
-\thispagestyle{empty}
-
-
-% define cv section
-\newcommand{\cvsection}[1]{\section*{\rmfamily#1}}
-\newcommand{\cvsubsection}[1]{\subsection*{\rmfamily\hspace{1.6em}#1}}
-\newcommand{\HL}[1]{\textbf{\color{red}#1}}
-
-% begin
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage[hidelinks,pdfauthor={Shayan Hajhashemi},pdftitle={CV de recherche — Shayan Hajhashemi}]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=1.15em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\vspace{-4pt}\titlerule]
+\titlespacing*{\section}{0pt}{9pt}{4pt}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\scriptsize Shayan Hajhashemi · Mise à jour : 5 novembre 2026}
+\fancyfoot[R]{\scriptsize\thepage}
+\setlength{\footskip}{20pt}
+\newlength{\projectheadingwidth}
+\newcommand{\project}[2]{%
+  \vspace{2pt}%
+  \settowidth{\projectheadingwidth}{\textbf{#1}\quad\textit{#2}}%
+  \ifdim\projectheadingwidth>\linewidth
+    \textbf{#1}\par\nopagebreak[4]\textit{#2}\par\nopagebreak[4]%
+  \else
+    \textbf{#1}\hfill\textit{#2}\par\nopagebreak[4]%
+  \fi}
+\newcommand{\me}{\textbf{Hajhashemi, S.}}
 \begin{document}
-
-% name
 \begin{center}
-    \Huge{
-    \rmfamily
-    \textbf{Shayan Hajhashemi}}
+{\LARGE\bfseries Shayan Hajhashemi}\\[3pt]
+Modèles du monde · Apprentissage de représentations · Systèmes dynamiques et commande\\[3pt]
+Université McGill · Montréal, Canada\quad
+\href{https://mila.quebec/en/directory/shayan-hajhashemi}{Profil Mila}\\[2pt]
+\small\href{https://shayshay42.github.io/}{Site web}\quad
+\href{https://github.com/shayshay42}{GitHub}\quad
+\href{https://scholar.google.com/citations?user=uW3aYOcAAAAJ}{Google Scholar}\quad
+\href{https://ca.linkedin.com/in/hshay}{LinkedIn}\\[2pt]
+\footnotesize shayan [dot] hajhashemi [at] mail [dot] mcgill [dot] ca
 \end{center}
-\vspace{20pt}
+\vspace{-11pt}
 
+\section*{Profil de recherche}
+Chercheur en apprentissage automatique scientifique : apprentissage de représentations et systèmes dynamiques non linéaires. Mes travaux couvrent les modèles du monde multimodaux, les solveurs inverses appris et la commande optimale sous contraintes en simulation différentiable. Intérêt pour les représentations conditionnées par l'action et les modèles du monde fiables pour l'apprentissage robotique et la planification.
+Recherche de stages et de postes de recherche à temps plein.
 
-\setlength{\parskip}{1pt}
-\renewcommand{\arraystretch}{1.25}
+\section*{Formation}
+\textbf{Université McGill} — Doctorat, sciences quantitatives de la vie\hfill Prévu en 2026\\
+Direction : Morgan Craig et Amin Emad. Outils d'apprentissage automatique scientifique pour la dynamique non linéaire et la commande, appliqués à la pharmacologie.\\
+\textbf{Université McGill} — B.Sc. (Honours), immunologie interdépartementale\hfill 2021\\
+Projet Honours : motifs de Turing dans les systèmes de réaction--diffusion; direction : Anmar Khadra.
 
-% Contact Information
-
-\noindent Départment de sciences de la vie quantitatives
-
-\noindent Université McGill\hfill \texttt{shayan [dot] hajhashemi [at] mail [dot] mcgill [dot] ca}
-
-\noindent Montréal, QC, Canada\hfill \url{https://github.com/shayshay42}
-
-
-\setlength{\parskip}{3pt}
-
-
-
-
-% Summary / Statement
-\cvsection{Sommaire}
-\indent
-
-\hangindent=2emJe suis un scientifique interdisciplinaire doté d'une solide expérience en immunologie expérimentale, avec un accent particulier sur l'amélioration de la l'administration de thérapies géniques médiée par des nanocorps pour le traitement du carcinome pulmonaire. Mon expertise s'étend à la modélisation de systèmes dynamiques non-linéaires, englobant une gamme de phénomènes biologiques, de l'activité neuronale à la motilité cellulaire. Dans ma thèse, j'intègre l'apprentissage en profondeur, le contrôle optimal et la modélisation mécanistique pour perfectionner les méthodes utilisées dans les essais cliniques virtuels en immuno-oncologie.
-Langues parlées: Anglais, Français, Farsi
-
-% Education
-\cvsection{Éducation}
-\indent
-
-\textbf{Université McGill}, Montréal, QC, Canada
-
-\hspace{1em} \textbf{Ph.D}, Sciences de la Vie Quantitatives, \hfill Diplôme prévu : 2026
-\begin{itemize}[leftmargin=4em, itemsep=0pt]
-    \item[] \textbf{Titre de thèse}: Optimisation de thérapies combinées à l'aide des EDO-neuronales dans le cadre d'essais cliniques virtuels du glioblastome.
-    \item[] \textbf{Superviseurs}: Morgan Craig \& Amin Emad
-\end{itemize}
-\vspace{3pt}
-
-\hspace{1em} \textbf{B.Sc. Hons.}, Immunologie Interdépartmental, \hfill 2021
-\begin{itemize}[leftmargin=4em, itemsep=0pt]
-    \item[] \textbf{Projet Final}: Analyse des perturbations locales (LPA) des motifs de Turing dans la polarisation et la motilité des cellules immunitaires
-    \item[] \textbf{Superviseur}: Anmar Khadra
+\section*{Travaux de recherche sélectionnés}
+\project{Modèles du monde multimodaux : alignement, prédiction et commande}{Soumis à AISTATS 2027}
+\begin{itemize}
+\item Co-conçu des approches d'alignement des représentations et de commande prédictive non linéaire (NMPC) pour les modèles du monde multimodaux; contribué à l'analyse théorique.
+\item Comparé notre régularisation des représentations à SINDy et aux modèles de fondation de séries temporelles (TSFM), sur la même tâche de NMPC du système de Lorenz.
 \end{itemize}
 
-% distinction, award, honor, and fellowship
+\project{WeLD : inférence d'EDP par distillation en formulation faible sans étiquettes}{Manuscrit de travail}
+\begin{itemize}
+\item Coécrit une méthode sans étiquettes qui apprend des poids sur les équations faibles : elle distille des estimations classiques sur de longues fenêtres d'observation pour inférer les paramètres d'EDP sur de courtes fenêtres.
+\item Analysé le biais du modèle enseignant et les corrections par variables instrumentales; exploré des modèles du monde latents qui apprennent l'inférence des paramètres par prévision, sans enseignant.
+\end{itemize}
 
+\project{WAR : identification de systèmes par formulation faible et régularisation adaptative}{Soumis à AISTATS 2027}
+\begin{itemize}
+\item Associé sélection apprise de fenêtres temporelles et régularisation adaptative à des solveurs différentiables sous contraintes en formulation faible; estimé des paramètres non linéaires à partir d'observations bruitées par projection variable.
+\item Démontré de meilleures performances en inférence inverse sur des systèmes de test issus de six familles d'EDO, avec évaluations distinctes des paramètres et des trajectoires. Testé la sensibilité au bruit et à l'échantillonnage peu dense ou irrégulier.
+\end{itemize}
 
-% distinction, award, honor, and fellowship
-\cvsection{Prix et distinctions}
-\indent
-\begin{enumerate}
-    \item \textbf{Bourse d’études supérieures du Canada au doctorat (CRSNG - BESC D) }\hfill 2023 - 2026
-    \begin{itemize}[leftmargin=1em, itemsep=0pt]
-        \item[] \textit{105'000 \$ sur 3 ans},
-        \item[] \textbf{Titre} : Méthode pour la découverte d'interactions biochimiques sous-jacentes à partir de séries temporelles.
-    \end{itemize}
+\project{OIL : apprentissage d'initialisations par l'optimisation en aval}{Soumis à ICLR 2027}
+\begin{itemize}
+\item Entraîné des initialiseurs par passage de messages à travers cinq étapes différentiables d'ajustement de trajectoires, avec une perte à trois termes sur les paramètres initiaux, les paramètres affinés et les trajectoires simulées.
+\item Analysé la géométrie des sensibilités par l'information de Fisher, les échecs de simulation et les diagnostics a posteriori.
+\end{itemize}
 
-    \item \textbf{Bourse de formation au doctorat (FRQ-Santé)}\hfill 2023 - 2026
-    \begin{itemize}[leftmargin=1em,itemsep=0pt]
-        \item[] \textit{63'000 \$ sur 3 ans},
-        \item[] \textbf{Titre} : Thrombocytopénie Cyclique : Mécanisme et Traitement d'une Maladie Dynamique via les Mathématiques
-    \end{itemize}
+\project{DiffDose : commande optimale différentiable pour la médecine personnalisée}{Prépublication; en évaluation à npj Systems Biology and Applications}
+\begin{itemize}
+\item Optimisé doses bornées et instants d'administration par simulation différentiable d'EDO et d'équations à retard. Comparé différentiation automatique, adjoints analytiques et différences finies en commande en boucle ouverte.
+\end{itemize}
 
-    \item \textbf{Lauréat de la thèse de 3 minutes du département}, \hfill Décembre 2022
+\project{Dynamique latente et apprentissage de représentations}{Prépublication; en évaluation à Nature Computational Science}
+\begin{itemize}
+\item Coécrit un cadre variationnel contraignant les représentations apprises d'états cellulaires (RNA-seq unicellulaire) à des flots sur un paysage énergétique, avec des EDO neuronales à gradient de potentiel pour prédire trajectoires et destins cellulaires.
+\end{itemize}
 
-    \item \textbf{Bourse Michael Wing Kin Chan and Lina Lai Yan Chan en Science }\hfill 2020 - 2021
-    \begin{itemize}[leftmargin=1em,itemsep=0pt]
-        \item[] \textit{5'000 \$ sur 2 ans},
-    \end{itemize}
-
-    \item \textbf{Dean's Multidisciplinary First Class Honors} \hfill 2019 - 2021
-
-    \item \textbf{Bourse de recherche au premier cycle (CRSNG-FRQNT supplément)} \hfill 2020
-    \begin{itemize}[leftmargin=1em,itemsep=0pt]
-        \item[] \textit{9'000 \$},
-    \end{itemize}
+\newpage
+\section*{Publications et manuscrits}
+\begin{enumerate}[leftmargin=1.2em,itemsep=7pt,topsep=2pt,parsep=0pt]
+\item \me; Shum-Tim, C.; Craig, M.; Emad, A.
+\textit{WAR: Weak-form Adaptive Regularization for Dynamical Systems Inverse Problems.}
+Soumis le 7 octobre 2026. En cours d'évaluation à \textit{AISTATS 2027}.
+\item \me; Shum-Tim, C.; Prakash, S.; Emad, A.
+\textit{Predators, Prey, and Sloppy Parameters: Fine-Tuning Amortized Inference for Generalized Lotka--Volterra.}
+Soumis le 18 septembre 2026. En cours d'évaluation à \textit{ICLR 2027}. \textbf{Co-premier auteur.}
+\item Ramezanian-Panahi, M.; \me; Rish, I.
+\textit{Multimodal World Models: Alignment, Prediction, and Control.}
+Soumis le 7 octobre 2026. En cours d'évaluation à \textit{AISTATS 2027}.
+\item \me; Emad, A.; Craig, M.
+\textit{DiffDose: Differentiable Programming for Personalized Dose-Regimen Optimal Control.}
+Soumis le 13 septembre 2026. DOI bioRxiv : \href{https://doi.org/10.64898/2026.09.07.749974}{10.64898/\allowbreak 2026.09.07.749974}.
+En cours d'évaluation à \textit{npj Systems Biology and Applications}.
+\item Poursina, A.; \me; Mikaeili Namini, A.; Saberi, A.; Emad, A.; Najafabadi, H.~S.
+\textit{A Latent Space Thermodynamic Model of Cell Differentiation.}
+Soumis le 6 mars 2026. DOI bioRxiv : \href{https://doi.org/10.64898/2026.03.04.709512}{10.64898/\allowbreak 2026.03.04.709512}.
+En cours d'évaluation à \textit{Nature Computational Science}.
+\item \href{https://www.gene.com/scientists/our-scientists/vincent-lemaire}{Lemaire, V.}; \me; Rotte, A.; Seyed-Ahmadi, A.; Tripathi, S.; Chanu, P.; Wu, B.; Li, C.; Ramanujan, S.; Gadkar, K.; Jin, J.
+\textit{Explainability analysis of QSP-derived virtual populations identifies robust pre-treatment biomarkers of immunotherapy.}
+Accepté pour publication dans \textit{npj Precision Oncology}.
 \end{enumerate}
-\cvsection{Publications}
-\begin{itemize}[leftmargin=1em, itemsep=1pt]
-    \item Iqraa Dhoparee-Doomah, Yichen Li, Manal Al Dow, \textbf{Shayan Hajhashemi}, \textit{et al.} (2026).
-    \emph{A Measurable Systemic Immune Phenotype Links Circulating Myeloid Dysfunction to Tumour Spatial Organization in Gastroesophageal Adenocarcinoma}.
-    Prépublication bioRxiv. \href{https://doi.org/10.64898/2026.09.17.752366}{DOI: 10.64898/2026.09.17.752366}.
 
-    \item \textbf{Shayan Hajhashemi}, Amin Emad, Morgan Craig (2026).
-    \emph{DiffDose: Differentiable Programming for Personalized Dose-Regimen Optimal Control}.
-    Prépublication bioRxiv. \href{https://doi.org/10.64898/2026.09.07.749974}{DOI: 10.64898/2026.09.07.749974}.
-    En cours d'évaluation par \emph{npj Systems Biology and Applications}.
+\section*{Publications complémentaires}
+\begin{enumerate}[start=7,leftmargin=1.2em,itemsep=7pt,topsep=2pt,parsep=0pt]
+\item Brassard, A.; Dhoparee-Doomah, I.; \me; Bourdeau, F.; Giannias, B.; Spicer, J.; Ferri, L.~E.; Ma, K.; Cools-Lartigue, J.
+\textit{Neutrophil Extracellular Trap Deposition Establishes an Immunosuppressive Environment in Non-metastatic Lymph Nodes and Facilitates Heterologous Metastatic Outgrowth.}
+28 octobre 2026. bioRxiv, version 1. DOI : \href{https://doi.org/10.64898/2026.10.23.761387}{10.64898/\allowbreak 2026.10.23.761387}.
 
-    \item Ali Poursina, \textbf{Shayan Hajhashemi}, Arsham Mikaeili Namini, Ali Saberi, Amin Emad, Hamed S.~Najafabadi (2026).
-    \emph{A Latent Space Thermodynamic Model of Cell Differentiation}.
-    Prépublication bioRxiv. \href{https://doi.org/10.64898/2026.03.04.709512}{DOI: 10.64898/2026.03.04.709512}.
+\item Dhoparee-Doomah, I.; Ma, K.; Brassard, A.; Leo, S.; \me; \ldots; Cools-Lartigue, J.
+\textit{ROR$\gamma$ Inverse Agonism Redirects Tumour-Conditioned Emergency Myelopoiesis and Attenuates Established Tumour Progression.}
+7 octobre 2026. bioRxiv, version 1. DOI : \href{https://doi.org/10.64898/2026.10.01.755741}{10.64898/\allowbreak 2026.10.01.755741}.
+En cours d'évaluation à \textit{Cancer Discovery}.
+\item Dhoparee-Doomah, I.; Li, Y.; Al Dow, M.; \me; \ldots; Cools-Lartigue, J.
+\textit{A Measurable Systemic Immune Phenotype Links Circulating Myeloid Dysfunction to Tumour Spatial Organization in Gastroesophageal Adenocarcinoma.}
+18 septembre 2026. bioRxiv, version 1. DOI : \href{https://doi.org/10.64898/2026.09.17.752366}{10.64898/\allowbreak 2026.09.17.752366}.
+\item Roche, P.; \me; Akavia, U.~D. (2020).
+\textit{Nanobody administration of Cas9 improves nuclear localization and HDR-enhanced synthetic lethality in A549 lung carcinoma.}
+Retiré pour des raisons de propriété intellectuelle. \href{https://www.jenthera.com/}{Jenthera Therapeutics}.
+\end{enumerate}
+Listes complètes des auteurs et brevet : \href{https://shayshay42.github.io/publications.html}{shayshay42.github.io/publications.html}.
 
-    \item \href{https://www.gene.com/scientists/our-scientists/vincent-lemaire}{Vincent Lemaire}, \textbf{Shayan Hajhashemi}, Anand Rotte, Arman Seyed-Ahmadi, Shubham Tripathi, Pascal Chanu, Benjamin Wu, Chunze Li, Saroja Ramanujan, Kapil Gadkar, Jin Jin.
-    \emph{Explainability analysis of QSP-derived virtual populations identifies robust pre-treatment biomarkers of immunotherapy}.
-    En cours d'évaluation par \emph{npj Precision Oncology}.
-
-    \item Philip Roche, \textbf{Shayan Hajhashemi}, Uri David Akavia (2020).
-    \emph{Nanobody administration of Cas9 improves nuclear localization and HDR-enhanced synthetic lethality in A549 lung carcinoma}.
-    Retiré pour des raisons de propriété intellectuelle. \href{https://www.jenthera.com/}{Jenthera Therapeutics}.
-\end{itemize}
-
-
-\cvsection{Conférences invitées}
-\begin{itemize}[leftmargin=1em]
-    \item \href{https://meetings.siam.org/sess/dsp_talk.cfm?p=157552}{\textbf{Real-MVP: Virtual Populations As Simulation-Based Conditional Neural Densities}}.\\
-    Conférence invitée dans le cadre d'un minisymposium, \emph{SIAM Conference on the Life Sciences (LS26)}, Cleveland (Ohio), 6 juillet 2026.\\
-    Minisymposium MS11: \emph{Recent Advances in Digital Twins and Trial Simulations to Guide Clinical Decisions}.
-\end{itemize}
-
-
-\cvsection{Projets académiques}
-\indent
-
-\textbf{Bifurcations spatiales dans les modèles de réaction-diffusion NPZ avec recyclage retardé}\\
-\indent
-\textit{Département de biologie de l'Université McGill, Superviseur : Frédéric Guichard} \hfill Août 2022
+\newpage
+\section*{Expérience de recherche}
+\textbf{Genentech} — Stagiaire en modélisation et simulation\hfill 2024--2025\\
+Direction : Vincent Lemaire; San Francisco, États-Unis.
 \begin{itemize}
-    \item[] Analyse de perturbation locale (LPA) de Nutrient-Phytoplankton-Zooplankton avec recyclage des nutriments.
-    \item[] Utilisation de XPP-Auto, MatCont, Mathematica, MATLAB, Python, et de paquets de simulation dans Julia pour analyser des EDP de réaction-diffusion non linéaires.
+\item Entraîné des modèles génératifs conditionnels par flow matching et transport optimal pour des populations virtuelles issues de simulateurs; appliqué les distributions apprises à l'analyse de biomarqueurs.
 \end{itemize}
+\textbf{Expérience antérieure :} Chercheur consultant, Jenthera Therapeutics (2020--2021); associé de recherche, Centre de recherche sur le cancer Goodman (2019--2020). Recherche expérimentale sur les nanocorps et vision par ordinateur.
 
-\textbf{Novelty Search dans les algorithmes évolutionnaires pour l'évolution des systèmes dynamiques}\\
-\indent
-\textit{Département de physique de l'Université McGill, Superviseur : Paul Francois} \hfill Avril 2022
+\section*{Projets techniques sélectionnés}
+\textbf{Manipulation robotique en simulation} — \href{https://github.com/shayshay42/robot}{Prototype d'apprentissage robotique en simulation}, 2022--2023
 \begin{itemize}
-    \item[] Méthodes utilisées pour l'intégration des séries temporelles, y compris les méthodes spectrales (décomposition en mode de Fourier et en ondelettes) et l'apprentissage automatique (transformateur, autoencodeur LSTM, modèle ARIMA) pour définir des métriques de nouveauté.
+\item Créé des scripts d'entraînement et d'évaluation pour la manipulation simulée avec MuJoCo, robosuite, Gymnasium et Stable-Baselines3; exploré soft actor--critic et le clonage comportemental à partir de démonstrations.
 \end{itemize}
-
-\textbf{Extraction et validation de motifs 3D flous d'ARN à par un modèle de réseau à graphe relationnel}\\
-\indent
-\textit{Département d'informatique de l'Université McGill, Superviseur : Jerome Waldispuhl} \hfill Décembre 2021
+\textbf{Apprentissage de représentations de systèmes dynamiques et de graphes} — McGill, 2021--2022
 \begin{itemize}
-    \item[] Méthodes utilisées pour intégrer les graphes et trouver la distance entre les structures moléculaires, polynôme caractéristique du quaternion pour la superposition moléculaire, apprentissage automatique (RGCN et regroupement), distance d'édition optimisée des graphes.
-Modélisation
+\item Exploré les plongements de séries temporelles par Transformers, autoencodeurs LSTM, caractéristiques de Fourier et ondelettes pour la recherche de nouveauté; étudié les plongements par convolution sur graphes relationnels et la comparaison structurale de motifs d'ARN 3D.
 \end{itemize}
 
-\textbf{Modélisation de la polarisation des cellules immunitaires à l'aide d'équations de réaction-diffusion}\\
-\indent
-\textit{Université McGill Département de physiologie, Superviseurs: Anmar Khadra \& Laurent Mackay} \hfill Août 2021
-\begin{itemize}
-    \item[] Générer des EDO à partir d'un schéma de réaction biochimique, les transformer en équations RD ou les simuler à l'aide du modèle cellulaire de Potts.
-    \item[] Analyser la structure de bifurcation et les états stables avec XPP-Auto et effectuer une analyse de perturbation locale. Accélération de code Matlab avec GPU
+\section*{Compétences techniques}
+\textbf{Programmation :} Python, Julia, MATLAB; PyTorch, JAX/diffrax, Pyro, Julia SciML.\\
+\textbf{Méthodes :} EDO neuronales, réseaux de neurones sur graphes, identification de systèmes, optimisation différentiable, inférence variationnelle, flow matching, analyse de sensibilité, commande prédictive.\\
+\textbf{Projets de simulation :} MuJoCo, robosuite, Gymnasium, Stable-Baselines3; expériences d'apprentissage par renforcement et par imitation.
+
+\section*{Présentations}
+\begin{itemize}[leftmargin=1.15em,itemsep=6pt]
+\item \me\ \href{https://meetings.siam.org/sess/dsp_talk.cfm?p=157552}{\textit{Real-MVP: Virtual Populations As Simulation-Based Conditional Neural Densities.}}
+SIAM Conference on the Life Sciences, Cleveland, Ohio, 6 juillet 2026.
+Présentation orale invitée à une conférence internationale. MS11: Recent Advances in Digital Twins and Trial Simulations to Guide Clinical Decisions.
+\item Ramezanian-Panahi, M.; \me; Rish, I.
+\href{https://www.main2026.org/abstracts}{\textit{Cross-modal control in the Virtual Brain.}}
+Présentation par affiche (4D), \href{https://www.main2026.org/program}{MAIN 2026 — Montreal AI and Neuroscience}, HEC Montréal, Montréal, Canada, 30 octobre 2026.
+\item Shum-Tim, C.; \me\ \textit{Weak-Form Distillation for Label-Free PDE Inverse Problems.}
+\href{https://wmw-aspen.github.io/}{World Modeling for Physics Workshop}, Aspen Center for Physics, Aspen, Colorado, 28 février--5 mars 2027.
+\textbf{Présentation orale acceptée; à venir.}
 \end{itemize}
 
+\section*{Enseignement et service}
+\textbf{Enseignement :} Apprentissage automatique scientifique et EDO dans Julia, formateur d'atelier (2023); dynamique non linéaire et méthodes de calcul aux cycles supérieurs, auxiliaire d'enseignement (2022).\\
+\textbf{Service :} Évaluateur pour une conférence Julia (2024).
 
-% academic employment
-\cvsection{Postes académiques}
-\indent
-
-\textbf{Centre de recherche sur le cancer Goodman}, Montréal, QC, Canada \hfill (2019 - 2020)
-\begin{itemize}
-    \item[] Associé de recherche, Superviseur: Uri David Akavia
-    \item[] \textbf{Projet}: Optimiser la méthodologie pour clarifier le rôle des nanocorps anti-EGFR dans la promotion de l'endocytose des complexes CRISPR-Cas9 pour conférer une létalité synthétique au cisplatine dans le carcinome pulmonaire A549 par réparation homologue dirigée.
-\end{itemize}
-
-\textbf{Jenthera Therapeutics (admare/neomed bioinovations)}, Montréal, QC, Canada \hfill (2020-2021)
-\begin{itemize}
-    \setlength{\emergencystretch}{2em}
-    \item[] Chercheur consultant, Superviseur : Phillip Roche
-    \item[] \textbf{Projet}: Clonage moléculaire, génération de librairies par Phage display et criblage pour l'obtention de nouveaux nanocorps par tri magnétique et cytométrie en flux (C.F.M.). tri magnétique et cytométrie de flux (FACS), expression et purification de protéines à grande échelle, conjugaison de colorants et fusion de protéines, Immunohistochimie et Western Blot pour les tests et la validation, analyse d'images avec ImageJ (Fiji), macros personnalisées et algorithmes de vision par ordinateur. et les algorithmes de vision par ordinateur.
-\end{itemize}
-
-
-% teaching experience
-\cvsection{Enseignement}
-\indent
-
-\textbf{Fondements des sciences quantitatives de la vie (niveau-600, deuxième cycle)}\hfill Automne 2022
-
-\hspace{2em}Assistant d'enseignement, avec le Prof. Leon Glass, à l'Université McGill
-
-\hspace{2em}Intro aux systèmes dynamiques non-linéaires et méthodes informatiques en neurophysiologie et génétique.\\
-
-\textbf{Biochimie métabolique (niveau-300, premier cycle)}\hfill Autonome 2022
-
-\hspace{2em}Assistant d'enseignement, avec le Prof. Lawrence Kazak, à l'Université McGill
-
-\hspace{2em} Thermodynamique et biochimie des voies métaboliques.\\
-
-\textbf{Apprentissage scientifique des machines et ODEs dans Julia (atelier départemental)}\hfill Automne 2023
-
-\hspace{2em}Instructeur, à l'Université McGill
-
-% academic service
-\cvsection{Service Académique}
-\indent
-
-\textbf{Éditeur}, évaluateur interne des bourses de voyage du CRSNG, des IRSC et du FRQ \hfill (2023)\\
-\indent
-\textbf{Chroniqueur}, vulgarisation scientifique locale de la recherche de pointe en santé \hfill (2019-2020)\\
-\indent
-\textbf{Bénévole}, hôpital universitaire local, soins intensifs \hfill (2019-Present)
-% academic employment
-\cvsection{Projets Artistiques \& culturels}
-\indent
-
-\textbf{Application Web d'enquête anonyme: readtheroom}\\
-\indent
-\textit{Université McGill, personnel du hackathon de physique} \hfill Décembre 2023
-\begin{itemize}[itemsep=0pt]
-    \item[] Voir: \url{https://readtheroom.site/}
-    \item[] Utilisation de Jinja à l'intérieur de Flask et du backend pgsql4 pour implémenter l'interface utilisateur des questions et réponses. Visualisation des données PyPlot.
-\end{itemize}
-
-\textbf{Implémentation de la détection d'objets en temps réel pour l'identification des espèces de tortues (atelier)}\\
-\indent
-\textit{Université McGill \& Académie Kuper} \hfill Octobre 2021
-\begin{itemize}[itemsep=0pt]
-    \item[] Atelier sur l'utilisation de PyTorch Mobile et Onnx pour l'exportation du modèle convolutionnel YOLOv5 entraîné.
-\end{itemize}
-
-
-
-% language
-
-
-
-% % other things
-% \cvsection{Compétences Techniques}
-% \indent
-
-% \textbf{Techniques de Laboratoire :}
-% \begin{itemize}
-%     \item[] Expérience des flux de travail de routine en génétique, biochimie et immunologie.
-%     \item[] Maîtrise des méthodes de biologie structurale, des études d'association à l'échelle du génome (GWAS) et des réseaux de régulation génique.
-% \end{itemize}
-
-% \textbf{Informatique :}
-% \begin{itemize}
-%     \item[] A l'aise avec PyTorch, maîtrise de JAX pour la mise en œuvre d'équations différentielles ordinaires neurales (ODE neurales).
-%     \item[] Expérience de l'apprentissage automatique scientifique en Julia
-% \end{itemize}
-
-% \textbf{Mathématiques Appliquées :}
-% \begin{itemize}
-%     \item[] Expérience avec XPPAuto et Auto-07p pour l'analyse des systèmes dynamiques.
-%     \item[] Mise en œuvre de simulations d'EDP de réaction-diffusion et de modèles Cellular-Potts dans Julia, MATLAB et Python.
-% \end{itemize}
-
-
-
-\vfill
-
-% \section*{\hfill\color{OliveGreen}\today}
-
+\section*{Prix et distinctions sélectionnés}
+BESC D du CRSNG (2023--2026); bourse doctorale FRQ-Santé (attribuée pour 2023--2026); lauréat du concours départemental de thèse en trois minutes (2022); Dean's Multidisciplinary First Class Honours (2019--2021).
 \end{document}
