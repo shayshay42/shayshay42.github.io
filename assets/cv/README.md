@@ -3,9 +3,12 @@
 `source/EN.tex` is the English research CV approved by Shayan Hajhashemi on
 October 14, 2026. It emphasizes world models, representation learning, system
 identification, and control. The author seeks research internships and full-time
-research roles. Its three-page layout includes nine works and two presentations.
+research roles. Its three-page layout includes nine works and three presentations.
 Submission dates, review statuses, OIL co-first authorship, and the upcoming
-Aspen oral acceptance were supplied by the author.
+Aspen oral acceptance were supplied by the author. The November 5 update records
+the author-confirmed QSP acceptance at npj Precision Oncology and adds the MAIN
+2026 poster, with author order and October 30 date verified against the official
+conference abstracts and program.
 
 **The French CV is unchanged at the author's explicit request.** `source/FR.tex`
 and `shayan-hajhashemi-cv-fr.pdf` retain their previous three-page layout,
@@ -45,5 +48,5 @@ cp /tmp/shayan-cv-build/en/EN.pdf assets/cv/shayan-hajhashemi-cv-en.pdf
 
 Keep build logs and intermediate files outside the repository. Review every
 PDF page for overflow and split entries. Check extracted text, contact privacy,
-PDF annotations, metadata, author order, review status, DOI links, and both talk
+PDF annotations, metadata, author order, review status, DOI links, and all presentation
 entries before replacing the public PDFs.
