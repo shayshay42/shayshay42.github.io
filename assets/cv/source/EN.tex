@@ -12,8 +12,8 @@
 \usepackage{xcolor}
 \usepackage[hidelinks,pdfauthor={Shayan Hajhashemi},pdftitle={Research CV — Shayan Hajhashemi}]{hyperref}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{3pt}
-\setlist[itemize]{leftmargin=1.15em,itemsep=1.5pt,topsep=2pt,parsep=0pt}
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=1.15em,itemsep=1pt,topsep=2pt,parsep=0pt}
 \titleformat{\section}{\large\bfseries}{}{0em}{}[\vspace{-4pt}\titlerule]
 \titlespacing*{\section}{0pt}{9pt}{4pt}
 \pagestyle{fancy}
@@ -22,7 +22,15 @@
 \fancyfoot[L]{\scriptsize Shayan Hajhashemi · Updated 5 November 2026}
 \fancyfoot[R]{\scriptsize\thepage}
 \setlength{\footskip}{20pt}
-\newcommand{\project}[2]{\vspace{3pt}\textbf{#1}\hfill\textit{#2}\par}
+\newlength{\projectheadingwidth}
+\newcommand{\project}[2]{%
+  \vspace{2pt}%
+  \settowidth{\projectheadingwidth}{\textbf{#1}\quad\textit{#2}}%
+  \ifdim\projectheadingwidth>\linewidth
+    \textbf{#1}\par\nopagebreak[4]\textit{#2}\par\nopagebreak[4]%
+  \else
+    \textbf{#1}\hfill\textit{#2}\par\nopagebreak[4]%
+  \fi}
 \newcommand{\me}{\textbf{Hajhashemi, S.}}
 \begin{document}
 \begin{center}
@@ -36,45 +44,51 @@ McGill University · Montréal, Canada\quad
 \href{https://ca.linkedin.com/in/hshay}{LinkedIn}\\[2pt]
 \footnotesize shayan [dot] hajhashemi [at] mail [dot] mcgill [dot] ca
 \end{center}
-\vspace{-7pt}
+\vspace{-11pt}
 
 \section*{Research profile}
-Machine learning researcher working on predictive representations, system identification, and differentiable simulation of nonlinear dynamics. Research spans multimodal world models, learned inverse solvers, and constrained optimal control. Interested in action-conditioned representations and reliable world models for robot learning and planning.
+Scientific machine learning researcher working on representation learning and nonlinear dynamical systems. Research spans multimodal world models, learned inverse solvers, and constrained optimal control in differentiable simulations. Interested in action-conditioned representations and reliable world models for robot learning and planning.
 Seeking research internships and full-time research roles.
 
 \section*{Education}
 \textbf{McGill University} — PhD, Quantitative Life Sciences\hfill Expected 2026\\
-Supervisors: Morgan Craig and Amin Emad. Research in scientific machine learning, nonlinear dynamics, and control.\\
+Supervisors: Morgan Craig and Amin Emad. Developing scientific machine learning tools in nonlinear dynamics and control with applications in pharmacology.\\
 \textbf{McGill University} — BSc (Honours), Interdepartmental Immunology\hfill 2021\\
-Honours research: Turing patterns, reaction--diffusion systems, and cell motility; supervisor: Anmar Khadra.
+Honours research: Investigating Turing patterns in reaction--diffusion systems; supervisor: Anmar Khadra.
 
 \section*{Selected research}
 \project{Multimodal world models: alignment, prediction, and control}{AISTATS 2027 submission}
 \begin{itemize}
 \item Co-developed concepts for representation alignment and nonlinear model predictive control (NMPC) in multimodal world models; contributed to theoretical analysis.
-\item Implemented and audited controlled-Lorenz experiments in PyTorch, comparing cross-modal prediction, contrastive alignment, and inverse-dynamics regularization under latent-goal model predictive control: 80 fits and 4,208 control trials across five training seeds.
+\item Benchmarked our regularizer of learned representations to SINDy and time-series foundation models (TSFMs) on the same NMPC task for the Lorenz system.
 \end{itemize}
 
-\project{WAR: adaptive regularization for system identification}{AISTATS 2027 submission}
+\project{WeLD: label-free weak-form distillation for PDE inference}{Research draft}
+\begin{itemize}
+\item Coauthored a label-free method that learns weights over weak-form equations, distilling classical estimates from long observation windows into PDE parameter inference from short windows.
+\item Analyzed teacher bias and instrumental-variable corrections; explored forecasting-based latent world models that learn parameter inference without a teacher.
+\end{itemize}
+
+\project{WAR: weak-form adaptive regularization for system identification}{AISTATS 2027 submission}
 \begin{itemize}
 \item Combined learned temporal-window selection and adaptive regularization with differentiable constrained weak-form solvers; used variable projection for nonlinear parameter inference from noisy observations.
-\item Ranked first overall among eight methods on 1,200 held-out systems across six ODE families, evaluating parameter and trajectory recovery separately. Tested sensitivity to noise and sparse or irregular sampling.
+\item Showcased superior inverse problem performance on held-out systems across six ODE families, evaluating parameter and trajectory recovery separately. Tested sensitivity to noise and sparse or irregular sampling.
 \end{itemize}
 
 \project{OIL: learning initializers through downstream optimization}{ICLR 2027 submission}
 \begin{itemize}
-\item Trained message-passing initializers through five differentiable trajectory-matching updates, with losses on initial parameters, refined parameters, and simulated trajectories; used bounded optimization at inference.
-\item Evaluated inverse methods on 100,000 simulated systems at each of three system sizes using five-fold validation. Analyzed sensitivity geometry, rollout failures, posterior diagnostics, and matched optimization budgets.
+\item Trained message-passing initializers through five differentiable trajectory-matching updates, with a three-term loss on initial parameters, refined parameters, and simulated trajectories.
+\item Analyzed sensitivity geometry with Fisher information, investigated rollout failures and posterior diagnostics.
 \end{itemize}
 
-\project{DiffDose: differentiable optimal control}{Preprint; under review}
+\project{DiffDose: differentiable optimal control for personalized medicine}{Preprint; under review at npj Systems Biology and Applications}
 \begin{itemize}
-\item Optimized bounded dose amplitudes and administration times through differentiable ODE and delay-equation simulations. Compared automatic differentiation with analytic adjoints and finite differences for open-loop control.
+\item Optimized bounded dose amplitudes and administration times through differentiable ODE and delay differential equation simulations. Compared automatic differentiation with analytic adjoints and finite differences for open-loop control.
 \end{itemize}
 
-\project{Latent-space dynamics and representation learning}{Preprint}
+\project{Latent-space dynamics and representation learning}{Preprint; under review at Nature Computational Science}
 \begin{itemize}
-\item Coauthored a variational framework coupling learned cell-state representations to potential-gradient neural ODEs for trajectory and cell-fate prediction.
+\item Coauthored a variational framework that constrains learned cell-state representations of single-cell RNA-seq data to flows on an energy landscape, using potential-gradient neural ODEs for trajectory and cell-fate prediction.
 \end{itemize}
 
 \newpage
@@ -104,6 +118,10 @@ Accepted for publication in \textit{npj Precision Oncology}.
 
 \section*{Auxiliary publications}
 \begin{enumerate}[start=7,leftmargin=1.2em,itemsep=7pt,topsep=2pt,parsep=0pt]
+\item Brassard, A.; Dhoparee-Doomah, I.; \me; Bourdeau, F.; Giannias, B.; Spicer, J.; Ferri, L.~E.; Ma, K.; Cools-Lartigue, J.
+\textit{Neutrophil Extracellular Trap Deposition Establishes an Immunosuppressive Environment in Non-metastatic Lymph Nodes and Facilitates Heterologous Metastatic Outgrowth.}
+28 October 2026. bioRxiv, version 1. DOI: \href{https://doi.org/10.64898/2026.10.23.761387}{10.64898/\allowbreak 2026.10.23.761387}.
+
 \item Dhoparee-Doomah, I.; Ma, K.; Brassard, A.; Leo, S.; \me; \ldots; Cools-Lartigue, J.
 \textit{ROR$\gamma$ Inverse Agonism Redirects Tumour-Conditioned Emergency Myelopoiesis and Attenuates Established Tumour Progression.}
 7 October 2026. bioRxiv, version 1. DOI: \href{https://doi.org/10.64898/2026.10.01.755741}{10.64898/\allowbreak 2026.10.01.755741}.
@@ -124,10 +142,10 @@ Supervisor: Vincent Lemaire; San Francisco, USA.
 \begin{itemize}
 \item Trained conditional generative models using flow matching and optimal transport for simulator-derived virtual populations; applied learned distributions to biomarker analysis.
 \end{itemize}
-\textbf{Earlier research:} Consultant Research Scientist, Jenthera Therapeutics (2020--2021); Research Associate, Goodman Cancer Research Center (2019--2020). Experimental nanobody research and image analysis.
+\textbf{Earlier research:} Consultant Research Scientist, Jenthera Therapeutics (2020--2021); Research Associate, Goodman Cancer Research Center (2019--2020). Experimental nanobody research and computer vision.
 
 \section*{Selected technical projects}
-\textbf{Robot manipulation in simulation} — \href{https://github.com/shayshay42/robot}{Independent prototype}
+\textbf{Robot manipulation in simulation} — \href{https://github.com/shayshay42/robot}{Prototype for robot learning in simulation}, 2022--2023
 \begin{itemize}
 \item Built training and evaluation scripts for simulated manipulation with MuJoCo, robosuite, Gymnasium, and Stable-Baselines3; explored soft actor--critic and behavior cloning from demonstrations.
 \end{itemize}

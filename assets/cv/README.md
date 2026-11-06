@@ -3,12 +3,15 @@
 `source/EN.tex` is the English research CV approved by Shayan Hajhashemi on
 October 14, 2026. It emphasizes world models, representation learning, system
 identification, and control. The author seeks research internships and full-time
-research roles. Its three-page layout includes nine works and three presentations.
+research roles. Its three-page layout includes ten works and three presentations.
 Submission dates, review statuses, OIL co-first authorship, and the upcoming
 Aspen oral acceptance were supplied by the author. The November 5 update records
 the author-confirmed QSP acceptance at npj Precision Oncology and adds the MAIN
 2026 poster, with author order and October 30 date verified against the official
-conference abstracts and program.
+conference abstracts and program. The subsequent hand-edited source adds WeLD
+as a research project directly below the cross-modal world-model work and the
+October 28 neutrophil-trap preprint to auxiliary publications. The attached WeLD
+manuscript remains outside the public website repository.
 
 **The French CV is unchanged at the author's explicit request.** `source/FR.tex`
 and `shayan-hajhashemi-cv-fr.pdf` retain their previous three-page layout,
