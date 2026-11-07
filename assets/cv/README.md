@@ -10,7 +10,8 @@ Both CVs include ten works and three presentations, plus WeLD as a research
 project immediately below the cross-modal world-model work. Scientific paper and
 talk titles stay in English in the French bibliography. Preserve the author
 order, dates, DOI links, co-first authorship, and status distinctions in both
-versions: QSP is accepted at npj Precision Oncology; the MAIN entry is a poster;
+versions: QSP is accepted at npj Precision Oncology; OIL is withdrawn from ICLR
+2027 (author-confirmed November 7, 2026) and links to OpenReview; the MAIN entry is a poster;
 Aspen is an accepted upcoming oral presentation; WeLD remains a research draft.
 The October 28 neutrophil-trap paper is a bioRxiv preprint in auxiliary publications.
 

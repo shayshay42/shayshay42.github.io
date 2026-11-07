@@ -84,7 +84,7 @@ Paths in `provenance.json` identify files in the original research workspace; th
 On October 14, 2026, the author authorized publishing the titles previously withheld during anonymous review and supplied these updates:
 
 - WAR: submitted October 7, 2026; under review at AISTATS 2027.
-- Predators, Prey, and Sloppy Parameters (OIL): submitted September 18, 2026; under review at ICLR 2027; Shayan Hajhashemi is a co-first author.
+- Predators, Prey, and Sloppy Parameters (OIL): withdrawn from ICLR 2027, as confirmed by the author on November 7, 2026; originally submitted September 18, 2026. Shayan Hajhashemi is a co-first author. The title links to the [OpenReview forum](https://openreview.net/forum?id=fqiN6Vyw5F), with a separate [PDF link](https://openreview.net/pdf?id=fqiN6Vyw5F).
 - Multimodal World Models: Alignment, Prediction, and Control: Mahta Ramezanian-Panahi, Shayan Hajhashemi, Irina Rish; submitted October 7, 2026; under review at AISTATS 2027.
 - DiffDose: submitted September 13, 2026; under review at *npj Systems Biology and Applications*.
 - Latent Space Thermodynamic Model: submitted March 6, 2026; under review at *Nature Computational Science*.
@@ -92,7 +92,7 @@ On October 14, 2026, the author authorized publishing the titles previously with
 - RORγ: bioRxiv version 1, October 7, 2026; under review at *Cancer Discovery*.
 - Systemic immune phenotype: bioRxiv version 1, September 18, 2026.
 
-Submission and review statuses are author-supplied. Conference submissions remain under review; the QSP journal acceptance is separately confirmed by the author. BioRxiv links and DOI records remain distinct from journal/conference review status. The original preprint metadata was checked against bioRxiv/Crossref on September 30 and October 7, 2026; full deposited author lists remain in the BibTeX export. The nanobody manuscript retains its 2020 date, withdrawn-for-IP status, Jenthera link, and author order Philip Roche, Shayan Hajhashemi, Uri David Akavia.
+Submission and review statuses are author-supplied. The AISTATS submissions remain under review; OIL is withdrawn from ICLR 2027. The QSP journal acceptance is separately confirmed by the author. BioRxiv links and DOI records remain distinct from journal/conference review status. The original preprint metadata was checked against bioRxiv/Crossref on September 30 and October 7, 2026; full deposited author lists remain in the BibTeX export. The nanobody manuscript retains its 2020 date, withdrawn-for-IP status, Jenthera link, and author order Philip Roche, Shayan Hajhashemi, Uri David Akavia.
 
 The Patents section uses the author's PCT request excerpt: the hematopoietic stress invention, inventors Shayan Hajhashemi, Jonathan Cools-Lartigue, Benjamin Gordon, and Kim Ma, and applicant Rizome Biotech Inc. “Filed on WIPO” is the author-supplied status. P8341PC00 is the applicant/agent file reference, not a patent publication or application number. The preview timestamp is not a filing date. Decode Legal Inc. is the patent agent; its supplied business contacts remain public, while inventor and applicant addresses are omitted. Add a public record link once a publication number is available.
 
