@@ -79,7 +79,7 @@ Paths in `provenance.json` identify files in the original research workspace; th
 
 ## Publications and profile
 
-`publications.html` lists eleven named works: seven research articles/manuscripts (including the WeLD research draft), the retained nanobody manuscript, and three biology papers under “Auxiliary publications.” `assets/publications.bib` includes full author lists for all eleven works and citations for all three presentations.
+`publications.html` lists eleven named works: seven main research articles/manuscripts (including the WeLD research draft) and four entries under “Auxiliary publications,” including the retained nanobody manuscript. `assets/publications.bib` includes full author lists for all eleven works and citations for all three presentations.
 
 On October 14, 2026, the author authorized publishing the titles previously withheld during anonymous review and supplied these updates:
 
