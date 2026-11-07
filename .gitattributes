@@ -2,3 +2,7 @@
 
 *.pdf binary
 *.png binary
+*.glb binary
+
+# Generated Three.js bundles contain literal GLSL; preserve upstream whitespace.
+projects/voice-laser-lab/assets/*.js -whitespace

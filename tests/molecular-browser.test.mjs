@@ -146,7 +146,7 @@ test('molecular playground browser acceptance', async t => {
       const chemistryRequests = [];
       page.on('request', request => { if (request.url().includes('/rdkit-')) chemistryRequests.push(request.url()); });
       await page.goto(`${base}/`);
-      assert.equal(await page.locator('.project-card').count(), 3);
+      assert.equal(await page.locator('.project-card').count(), 4);
       await page.locator('[data-project="mol-cgl"]').scrollIntoViewIfNeeded();
       await page.locator('[data-project="mol-cgl"] canvas').waitFor();
       assert.deepEqual(chemistryRequests, []);

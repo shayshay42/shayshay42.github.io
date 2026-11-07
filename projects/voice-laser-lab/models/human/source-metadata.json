@@ -1,0 +1,16 @@
+{
+  "name": "Human base mesh with editable 53-bone rig",
+  "publisher": "Innerscene Corp",
+  "baseAssets": "MakeHuman / MPFB",
+  "source": "https://www.innerscene.com/tools/library/3d-parts/human-base-mesh-with-editable-53-bone-rig-8e7c8ab1",
+  "download": "https://www.innerscene.com/api/library/human-base-mesh-with-editable-53-bone-rig-8e7c8ab1/download",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "assetDeclaration": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0",
+    "copyright": "Authored by Innerscene Corp (innerscene.com). Public domain: dedicated under CC0 1.0 Universal, https://creativecommons.org/publicdomain/zero/1.0/. Free to use, modify and redistribute for any purpose, with no credit required."
+  },
+  "downloadDate": "2026-11-07",
+  "sha256": "f3cd655e44af0a79786b1b4349c4acf1ae342fe6bd0d5fc714e68470dea1b429"
+}

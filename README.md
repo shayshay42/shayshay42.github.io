@@ -49,7 +49,7 @@ Visit http://localhost:4173. No build or npm install is required. Typography use
 - `assets/publications.bib`: full-author BibTeX citations for eleven papers/manuscripts and three presentations.
 - `assets/cv/`: downloadable English and French CVs, with editable LaTeX sources in `source/`.
 - `math.js`: shared LaTeX rendering for all `.blog-post` articles.
-- `project-models.js`: original 3D adaptations of the Read the Room and Rizome marks, plus the molecular glider logo.
+- `project-models.js`: original 3D adaptations of the Read the Room and Rizome marks, the molecular glider, and the Voice Laser Lab apparatus.
 - `project-viewer.js`: lazy, on-demand logo rendering and pointer/focus tilt.
 - `assets/projects/`: rendered logo previews for loading, no-JavaScript, and no-WebGL views.
 - `theme.js`: shared enamel theme and matching sweater colors, with the choice persisted across the site.
@@ -113,11 +113,64 @@ The shared navigation links to Notes, Projects, Publications ([scholar](https://
 
 ## Project cards
 
-The homepage Projects section links directly to [Read the Room](https://readtheroom.site/), [Rizome Biotech](https://www.rizomebiotech.ai/), and the local [Molecular Game of Life](projects/molecular-game-of-life/). Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
+The homepage Projects section links directly to [Read the Room](https://readtheroom.site/), [Rizome Biotech](https://www.rizomebiotech.ai/), the local [Molecular Game of Life](projects/molecular-game-of-life/), and [Voice Laser Lab](projects/voice-laser-lab/). Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
 
-The logos use real beveled geometry with raised details: Read the Room's chameleon, Rizome's branching medallion, and a molecule transitioning into five enamel glider tiles. The external visual references are the sites' [chameleon mark](https://readtheroom.site/images/RTR-logo_Aug2025.png) and [Rizome mark](https://www.rizomebiotech.ai/favicon.png). The geometry is a stylized adaptation; the project names and marks identify their respective projects.
+The logos use real beveled geometry with raised details: Read the Room's chameleon, Rizome's branching medallion, a molecule transitioning into five enamel glider tiles, and a membrane/mirror laser apparatus with a raised Lissajous trace. The external visual references are the sites' [chameleon mark](https://readtheroom.site/images/RTR-logo_Aug2025.png) and [Rizome mark](https://www.rizomebiotech.ai/favicon.png). The geometry is a stylized adaptation; the project names and marks identify their respective projects.
 
 Cards are ordinary links with decorative 3D views. The scenes initialize near the viewport, tilt with the pointer or keyboard focus, and remain still when idle or when reduced motion is requested. Touch gestures retain normal link and page scrolling behavior. Local PNGs preserve the appearance when JavaScript or WebGL is unavailable. Brand colors stay fixed when the notebook enamel changes. Re-render the previews if the geometry or lighting changes.
+
+## Voice Laser Lab
+
+The fourth project card opens `projects/voice-laser-lab/`, a static browser build
+of the separate Voice Laser Lab project. Sound drives a six-mode membrane model;
+a small mirror reflects the laser onto a projection wall. Demo tones, local
+audio files, microphone input, recording, replay, and session ZIP export run in
+the visitor's browser. Microphone input requires HTTPS and permission; demo tones
+and files work without microphone access. This is an uncalibrated simulation,
+not a physical laser controller or calibrated acoustic measurement.
+
+The source project retains its Sites/Vinext build and has a separate
+`npm run build:pages` export. The website contains only `dist-pages/` output,
+with relative asset paths, model attribution, CC0 text, and third-party notices.
+It has no app backend, login, server bundle, or API credentials. Audio worklets,
+the export worker, poster, and human mesh load only when the app page opens.
+The deployed directory can be served by a plain static HTTP server.
+
+To refresh the app after source changes, run from the website root:
+
+```sh
+node tools/sync-voice-laser-lab.mjs ../voice-laser-lab
+```
+
+The source project must be available separately with its dependencies installed;
+a checkout of this website already includes the runnable export. The sync helper
+rebuilds the app, copies runtime assets, and removes stale hashed JS/CSS bundles.
+Do not copy `.openai`, `.sites-runtime`, `.wrangler`, environment files, server
+output, source maps, or local recordings into the public website.
+
+The card's original `voice-laser-lab` model uses the shared project viewer, with
+pointer/focus tilt, reduced-motion handling, and an image fallback. Its pink
+membrane, silver mirror, wood rail, teal sound cue, and red projected trace are
+rounded solids in the same enamel style as the other cards. To rerender its PNG,
+serve the website locally and run:
+
+```sh
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs BROWSER_CHANNEL=chrome node tools/render-project-logo.mjs voice-laser-lab
+```
+
+The helper renders a 720×440 still through the actual card viewer. The same helper
+accepts `readtheroom`, `rizome`, and `mol-cgl` when their geometry changes.
+
+With a local server running, the browser checks cover the fourth card, keyboard
+navigation, reduced motion, PNG fallbacks, nested app assets, and demo playback:
+
+```sh
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs BROWSER_CHANNEL=chrome node --test tests/project-browser.test.mjs
+```
+
+The app source's existing browser acceptance suite also covers recording and
+exact export replay, audio-file decoding, microphone handling, and view controls.
+Run it against the nested Pages route after changing the export or asset paths.
 
 ## Sharpener controls
 

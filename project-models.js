@@ -1,11 +1,12 @@
 import * as THREE from './assets/vendor/three.module.js';
 
-// Original geometry adapted from each project's published mark. These are solid
-// enamel reliefs, not image planes: the outlines, glasses and branches have depth.
+// Original project logos built as solid enamel objects. Published brand marks
+// guide the chameleon and branches; the science projects depict their subjects.
 export function createProjectLogo(kind) {
   if (kind === 'readtheroom') return createChameleon();
   if (kind === 'rizome') return createRizome();
   if (kind === 'mol-cgl') return createMolecularLife();
+  if (kind === 'voice-laser-lab') return createVoiceLaserLab();
   throw new Error(`Unknown project logo: ${kind}`);
 }
 
@@ -346,5 +347,147 @@ function createMolecularLife() {
   const transition = relief(group, roundedSquare(0.16, 0.035), live, 'Small enamel cell between molecule and grid', 0.065, 0.13, 0.012);
   transition.position.set(0.14, 0.12, 0.065);
   transition.rotation.z = -0.12;
+  return group;
+}
+
+function createVoiceLaserLab() {
+  const group = new THREE.Group();
+  group.name = 'Voice Laser Lab — membrane, mirror and enamel laser trace';
+  const paper = enamel('#f4ead7', 0.44, 0.06);
+  const paperEdge = enamel('#d5c4a3', 0.4, 0.12);
+  const pink = enamel('#df829d', 0.3, 0.08);
+  const pinkLip = enamel('#c85c81', 0.29, 0.12);
+  const silver = enamel('#d9e2e1', 0.16, 0.78);
+  const metal = enamel('#626d69', 0.3, 0.55);
+  const wood = enamel('#b98a59', 0.44, 0.08);
+  const woodEdge = enamel('#936743', 0.45, 0.08);
+  const red = enamel('#b73536', 0.26, 0.18);
+  const beam = enamel('#ed5552', 0.23, 0.12);
+  beam.emissive.set('#b92828');
+  beam.emissiveIntensity = 0.3;
+  const teal = enamel('#409c94', 0.3, 0.14);
+
+  const roundedRect = (width, height, radius) => {
+    const shape = new THREE.Shape();
+    const x = width / 2, y = height / 2;
+    shape.moveTo(-x + radius, -y);
+    shape.lineTo(x - radius, -y);
+    shape.quadraticCurveTo(x, -y, x, -y + radius);
+    shape.lineTo(x, y - radius);
+    shape.quadraticCurveTo(x, y, x - radius, y);
+    shape.lineTo(-x + radius, y);
+    shape.quadraticCurveTo(-x, y, -x, y - radius);
+    shape.lineTo(-x, -y + radius);
+    shape.quadraticCurveTo(-x, -y, -x + radius, -y);
+    return shape;
+  };
+  const block = (parent, name, size, position, material, radius = 0.055) => {
+    const mesh = relief(parent, roundedRect(size[0], size[1], radius), material,
+      name, position[2] - size[2] / 2, size[2], 0.018, 8);
+    mesh.position.x = position[0];
+    mesh.position.y = position[1];
+    return mesh;
+  };
+  const rod = (parent, name, start, end, radius, material) => {
+    const a = new THREE.Vector3(...start), b = new THREE.Vector3(...end);
+    const direction = b.clone().sub(a);
+    const mesh = addMesh(parent, new THREE.CylinderGeometry(radius, radius, direction.length(), 16), material, name);
+    mesh.position.copy(a).add(b).multiplyScalar(0.5);
+    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+    return mesh;
+  };
+  const stroke = (parent, name, points, radius, material, closed = false) => {
+    const curve = new THREE.CatmullRomCurve3(points, closed, 'centripetal');
+    return addMesh(parent, new THREE.TubeGeometry(curve, Math.max(24, points.length), radius, 8, closed), material, name);
+  };
+
+  // A long rounded wooden support ties the small apparatus together. The
+  // darker front edge gives the rail depth without a texture or image plane.
+  block(group, 'Rounded wooden optical rail', [3.35, 0.18, 0.44], [0, -0.78, -0.02], wood);
+  block(group, 'Warm wood front edge', [3.28, 0.046, 0.018], [0, -0.827, 0.218], woodEdge, 0.02);
+  for (const x of [-1.3, 1.3]) {
+    block(group, 'Dark enamel rail foot', [0.3, 0.1, 0.4], [x, -0.915, -0.02], metal, 0.04);
+  }
+
+  const drum = new THREE.Group();
+  drum.name = 'Open paper cylinder with stretched pink balloon membrane';
+  drum.position.set(-0.68, 0.27, 0.04);
+  drum.rotation.y = 0.35;
+  group.add(drum);
+
+  // A closed wall profile revolved about the tube axis leaves a real open bore
+  // at the back. The pink membrane covers the near end of the paper cylinder.
+  const wallProfile = [
+    [0.43, -0.39], [0.48, -0.39], [0.49, -0.36],
+    [0.49, 0.2], [0.47, 0.23], [0.43, 0.23], [0.43, -0.39],
+  ].map(([r, z]) => new THREE.Vector2(r, z));
+  const shell = addMesh(drum, new THREE.LatheGeometry(wallProfile, 48), paper, 'Hollow cream paper cylinder');
+  shell.rotation.x = Math.PI / 2;
+  for (const z of [-0.39, 0.23]) {
+    const rim = addMesh(drum, new THREE.TorusGeometry(0.462, 0.027, 10, 48), paperEdge, 'Rounded paper tube rim');
+    rim.position.z = z;
+  }
+  const membrane = addMesh(drum, new THREE.SphereGeometry(0.447, 40, 24), pink, 'Soft pink balloon membrane');
+  membrane.scale.z = 0.075;
+  membrane.position.z = 0.253;
+  const retainer = addMesh(drum, new THREE.TorusGeometry(0.458, 0.038, 12, 48), pinkLip, 'Pink membrane retaining lip');
+  retainer.position.z = 0.254;
+
+  const mirror = block(drum, 'Small silver mirror on the membrane', [0.23, 0.27, 0.046], [0.035, 0.015, 0.318], silver, 0.04);
+  mirror.rotation.z = -0.15;
+  const mirrorGlint = rod(drum, 'Short highlight on silver mirror', [-0.025, 0.103, 0.35], [0.095, 0.08, 0.35], 0.008, paper);
+  mirrorGlint.castShadow = false;
+  block(group, 'Cream drum saddle', [0.53, 0.14, 0.36], [-0.68, -0.29, 0], paperEdge);
+  rod(group, 'Metal support below the drum', [-0.68, -0.69, 0], [-0.68, -0.32, 0], 0.075, metal);
+
+  // The screen is a solid rounded tile on its own short support. Its enamel
+  // Lissajous path is a raised tube, including at the small self-crossings.
+  const screen = new THREE.Group();
+  screen.name = 'Cream projection screen with raised Lissajous figure';
+  // Face the membrane toward the screen, and keep the screen's front behind
+  // the reflection point. Both beams then stay on the visible side of each face.
+  screen.position.set(1.035, 0.19, 0.18);
+  group.add(screen);
+  block(screen, 'Warm screen edge', [1.34, 1.47, 0.14], [0, 0, 0], paperEdge, 0.1);
+  block(screen, 'Cream enamel projection surface', [1.25, 1.38, 0.055], [0, 0, 0.092], paper, 0.08);
+  const trace = Array.from({ length: 160 }, (_, i) => {
+    const t = i / 160 * Math.PI * 2;
+    return new THREE.Vector3(0.455 * Math.sin(2 * t), 0.46 * Math.sin(3 * t), 0.15 + 0.008 * Math.cos(t));
+  });
+  stroke(screen, 'Raised red 2-to-3 Lissajous trace', trace, 0.024, red, true);
+  rod(group, 'Projection screen support', [1.035, -0.69, 0.12], [1.035, -0.5, 0.15], 0.065, metal);
+
+  // Connect the beam endpoints to the actual mirror and trace coordinates,
+  // keeping the optical path attached when the whole logo tilts in the card.
+  group.updateMatrixWorld(true);
+  const mirrorPoint = drum.localToWorld(new THREE.Vector3(0.035, 0.015, 0.365));
+  const muzzle = new THREE.Vector3(-1.17, -0.23, 0.75);
+  const laserDirection = mirrorPoint.clone().sub(muzzle).normalize();
+  const laserBack = muzzle.clone().addScaledVector(laserDirection, -0.43);
+  rod(group, 'Silver laser barrel', laserBack.toArray(), muzzle.toArray(), 0.105, silver);
+  rod(group, 'Dark enamel laser housing', laserBack.toArray(), muzzle.clone().addScaledVector(laserDirection, -0.13).toArray(), 0.12, metal);
+  const aperture = muzzle.clone().addScaledVector(laserDirection, 0.006);
+  rod(group, 'Red laser aperture', muzzle.toArray(), aperture.toArray(), 0.055, red);
+  const mount = laserBack.clone().lerp(muzzle, 0.35);
+  rod(group, 'Laser mounting post', [mount.x, -0.69, 0.12], [mount.x, mount.y - 0.085, mount.z], 0.047, metal);
+  rod(group, 'Incident red beam from laser to mirror', aperture.toArray(), mirrorPoint.toArray(), 0.017, beam);
+  const targetPhase = Math.PI * 3 / 4;
+  const target = screen.localToWorld(new THREE.Vector3(
+    0.455 * Math.sin(2 * targetPhase), 0.46 * Math.sin(3 * targetPhase),
+    0.15 + 0.008 * Math.cos(targetPhase),
+  ));
+  rod(group, 'Reflected red beam from mirror to screen trace', mirrorPoint.toArray(), target.toArray(), 0.017, beam);
+  const spot = addMesh(group, new THREE.SphereGeometry(0.04, 16, 12), beam, 'Red light landing on the Lissajous trace');
+  spot.position.copy(target);
+
+  // Three short teal sound arcs provide a compact voice cue beside the tube.
+  for (let i = 0; i < 3; i++) {
+    const radius = 0.13 + i * 0.075;
+    const points = Array.from({ length: 24 }, (_, j) => {
+      const angle = -0.9 + j / 23 * 1.8;
+      return new THREE.Vector3(-1.71 + Math.cos(angle) * radius, 0.6 + Math.sin(angle) * radius, 0.16);
+    });
+    stroke(group, 'Teal voice wave entering the tube', points, 0.018, teal);
+  }
   return group;
 }
