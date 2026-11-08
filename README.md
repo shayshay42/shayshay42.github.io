@@ -113,9 +113,9 @@ The shared navigation links to Notes, Projects, Publications ([scholar](https://
 
 ## Project cards
 
-The homepage Projects section links directly to [Read the Room](https://readtheroom.site/), [Rizome Biotech](https://www.rizomebiotech.ai/), the local [Molecular Game of Life](projects/molecular-game-of-life/), and [Voice Laser Lab](projects/voice-laser-lab/). Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
+The homepage Projects section links directly to [Read the Room](https://readtheroom.site/), [Rizome Biotech](https://www.rizomebiotech.ai/), the local [Molecular Game of Life](projects/molecular-game-of-life/), [Voice Laser Lab](projects/voice-laser-lab/), and [Stereogram Runner](projects/stereogram-runner/). Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
 
-The logos use real beveled geometry with raised details: Read the Room's chameleon, Rizome's branching medallion, a molecule transitioning into five enamel glider tiles, and a membrane/mirror laser apparatus with a raised Lissajous trace. The external visual references are the sites' [chameleon mark](https://readtheroom.site/images/RTR-logo_Aug2025.png) and [Rizome mark](https://www.rizomebiotech.ai/favicon.png). The geometry is a stylized adaptation; the project names and marks identify their respective projects.
+The logos use real beveled geometry with raised details: Read the Room's chameleon, Rizome's branching medallion, a molecule transitioning into five enamel glider tiles, a membrane/mirror laser apparatus with a raised Lissajous trace, and a T-Rex depth relief rising through an enamel pin-art panel. The external visual references are the sites' [chameleon mark](https://readtheroom.site/images/RTR-logo_Aug2025.png) and [Rizome mark](https://www.rizomebiotech.ai/favicon.png). The geometry is a stylized adaptation; the project names and marks identify their respective projects.
 
 Cards are ordinary links with decorative 3D views. The scenes initialize near the viewport, tilt with the pointer or keyboard focus, and remain still when idle or when reduced motion is requested. Touch gestures retain normal link and page scrolling behavior. Local PNGs preserve the appearance when JavaScript or WebGL is unavailable. Brand colors stay fixed when the notebook enamel changes. Re-render the previews if the geometry or lighting changes.
 
@@ -159,7 +159,7 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs BROWSER_CHANNEL=chrome node tool
 ```
 
 The helper renders a 720×440 still through the actual card viewer. The same helper
-accepts `readtheroom`, `rizome`, and `mol-cgl` when their geometry changes.
+accepts `readtheroom`, `rizome`, `mol-cgl`, and `stereogram-runner` when their geometry changes.
 
 With a local server running, the browser checks cover the fourth card, keyboard
 navigation, reduced motion, PNG fallbacks, nested app assets, and demo playback:
@@ -171,6 +171,42 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs BROWSER_CHANNEL=chrome node --te
 The app source's existing browser acceptance suite also covers recording and
 exact export replay, audio-file decoding, microphone handling, and view controls.
 Run it against the nested Pages route after changing the export or asset paths.
+
+## Stereogram Runner
+
+The fifth project card opens `projects/stereogram-runner/`. The source folder is
+still named `stereogram-studio`, but its current app is Stereogram Runner: a
+keyboard-controlled dinosaur game inside a moving multicolor autostereogram.
+Space or ↑ starts and jumps; pause and the viewing guide preserve game state.
+The guide reveals a matching 3D snapshot and offers depth/spacing calibration.
+Gameplay, rendering, and the personal-best score remain in the visitor's browser.
+
+The separate app retains its Sites/Vinext build and adds `npm run build:pages`
+for this static deployment. The export contains only the entry page, app and
+worker bundles, CSS, favicon, and third-party notices. Historical prototype
+movies, sample outputs, source maps, server code, configuration, and credentials
+are excluded. The stereogram worker resolves relative to the emitted app bundle,
+so the app works at its nested Pages URL. A static-only link returns to the notebook.
+
+To refresh the app from its separate source checkout:
+
+```sh
+node tools/sync-stereogram-runner.mjs ../stereogram-studio
+```
+
+The card uses a slim cream pin-art panel, with an original forest-green T-Rex
+profile rising through a repeated dot field. Its silhouette has a long tail,
+a jaw notch, small arms, and bent running legs. Instanced pins keep draw calls
+low; the panel and relief have real depth. It illustrates hidden depth; the
+decorative logo itself is not an autostereogram. The shared viewer supplies
+pointer/focus tilt, reduced-motion behavior, and a 720×440 PNG fallback. Regenerate that image
+with `tools/render-project-logo.mjs stereogram-runner` and the same Playwright
+setup as the other logos.
+
+Run `tests/stereogram-browser.test.mjs` with the same Playwright setup used for
+the other project cards. Automated validation covers controls, worker loading, pause/retry, the viewing
+guide, fullscreen, and responsive layout. It cannot establish human binocular
+fusion or viewing comfort. Mobile layout is supported; jumping requires a keyboard.
 
 ## Sharpener controls
 

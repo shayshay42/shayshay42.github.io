@@ -4,7 +4,7 @@ import { mkdir } from 'node:fs/promises';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 
 const kind = process.argv[2] || 'voice-laser-lab';
-if (!['readtheroom', 'rizome', 'mol-cgl', 'voice-laser-lab'].includes(kind)) {
+if (!['readtheroom', 'rizome', 'mol-cgl', 'voice-laser-lab', 'stereogram-runner'].includes(kind)) {
   throw new Error(`Unknown project logo: ${kind}`);
 }
 const base = (process.env.BASE_URL || 'http://127.0.0.1:4173').replace(/\/$/, '');

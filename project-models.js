@@ -7,6 +7,7 @@ export function createProjectLogo(kind) {
   if (kind === 'rizome') return createRizome();
   if (kind === 'mol-cgl') return createMolecularLife();
   if (kind === 'voice-laser-lab') return createVoiceLaserLab();
+  if (kind === 'stereogram-runner') return createStereogramRunner();
   throw new Error(`Unknown project logo: ${kind}`);
 }
 
@@ -489,5 +490,141 @@ function createVoiceLaserLab() {
     });
     stroke(group, 'Teal voice wave entering the tube', points, 0.018, teal);
   }
+  return group;
+}
+
+function createStereogramRunner() {
+  const group = new THREE.Group();
+  group.name = 'Stereogram Runner — T-Rex rising from an enamel pin field';
+  const cream = enamel('#f0eadb', 0.39, 0.1);
+  const rim = enamel('#d4cbb7', 0.4, 0.13);
+  const silhouetteGreen = enamel('#365740', 0.36, 0.12);
+  const pinGreen = enamel('#4c7055', 0.32, 0.14);
+  const fieldMaterials = [
+    enamel('#dbd5c4', 0.39, 0.1),
+    enamel('#91a69a', 0.39, 0.1),
+    enamel('#b98e80', 0.39, 0.1),
+    enamel('#bcb18a', 0.39, 0.1),
+  ];
+  const roundedPanel = (width, height, radius) => {
+    const shape = new THREE.Shape(), x = width / 2, y = height / 2;
+    shape.moveTo(-x + radius, -y);
+    shape.lineTo(x - radius, -y); shape.quadraticCurveTo(x, -y, x, -y + radius);
+    shape.lineTo(x, y - radius); shape.quadraticCurveTo(x, y, x - radius, y);
+    shape.lineTo(-x + radius, y); shape.quadraticCurveTo(-x, y, -x, y - radius);
+    shape.lineTo(-x, -y + radius); shape.quadraticCurveTo(-x, -y, -x + radius, -y);
+    return shape;
+  };
+
+  // The slight separation between two solid panels makes the depth visible in
+  // the resting three-quarter view, without an extra scene or a display stand.
+  const rear = relief(group, roundedPanel(3.1, 1.9, 0.12), rim,
+    'Offset cream rear depth layer', -0.24, 0.07, 0.025, 12);
+  rear.position.set(-0.075, 0.055, -0.24);
+  relief(group, roundedPanel(3.1, 1.9, 0.12), cream,
+    'Slim beveled cream pin-art panel', -0.1, 0.13, 0.03, 12);
+
+  // An original continuous running profile: a long balancing tail, raised
+  // tapered head, an open jaw notch, short arms, and two bent hind legs.
+  const rex = new THREE.Shape();
+  rex.moveTo(-1.25, 0.025);
+  rex.bezierCurveTo(-0.96, 0.07, -0.72, 0.21, -0.48, 0.3);
+  rex.bezierCurveTo(-0.24, 0.39, -0.02, 0.37, 0.13, 0.54);
+  rex.quadraticCurveTo(0.18, 0.68, 0.36, 0.7);
+  rex.quadraticCurveTo(0.7, 0.75, 1.07, 0.63);
+  rex.quadraticCurveTo(1.19, 0.6, 1.19, 0.51);
+  rex.lineTo(1.19, 0.405);
+  rex.lineTo(0.7, 0.395);
+  rex.quadraticCurveTo(0.65, 0.36, 0.7, 0.335);
+  rex.lineTo(1.12, 0.3);
+  rex.lineTo(1.075, 0.23);
+  rex.quadraticCurveTo(0.81, 0.19, 0.56, 0.225);
+  rex.quadraticCurveTo(0.43, 0.235, 0.32, 0.175);
+  rex.lineTo(0.48, 0.015);
+  rex.lineTo(0.625, 0.055);
+  rex.lineTo(0.665, -0.035);
+  rex.lineTo(0.48, -0.095);
+  rex.lineTo(0.3, 0.035);
+  rex.quadraticCurveTo(0.24, -0.08, 0.075, -0.19);
+  rex.lineTo(0.285, -0.39);
+  rex.lineTo(0.15, -0.58);
+  rex.lineTo(0.41, -0.615);
+  rex.lineTo(0.44, -0.7);
+  rex.lineTo(0.055, -0.7);
+  rex.lineTo(0.005, -0.605);
+  rex.lineTo(0.105, -0.425);
+  rex.lineTo(-0.175, -0.305);
+  rex.lineTo(-0.285, -0.405);
+  rex.lineTo(-0.54, -0.565);
+  rex.lineTo(-0.42, -0.6);
+  rex.lineTo(-0.445, -0.68);
+  rex.lineTo(-0.72, -0.65);
+  rex.lineTo(-0.695, -0.535);
+  rex.lineTo(-0.48, -0.335);
+  rex.lineTo(-0.545, -0.12);
+  rex.bezierCurveTo(-0.79, -0.055, -1.05, -0.015, -1.25, 0.025);
+  rex.closePath();
+  relief(group, rex, silhouetteGreen, 'Continuous dark forest T-Rex depth silhouette',
+    0.075, 0.06, 0.008, 18);
+
+  // Classify the same repeated dot field against the silhouette, raising its
+  // green pins. This is a tactile stereogram motif, not a calibrated illusion.
+  const contour = rex.getPoints(24);
+  const inside = (x, y) => {
+    let contained = false;
+    for (let i = 0, j = contour.length - 1; i < contour.length; j = i++) {
+      const a = contour[i], b = contour[j];
+      if ((a.y > y) !== (b.y > y) && x < (b.x - a.x) * (y - a.y) / (b.y - a.y) + a.x) {
+        contained = !contained;
+      }
+    }
+    return contained;
+  };
+  const pins = fieldMaterials.map(() => []);
+  const raised = [];
+  for (let row = 0; row < 24; row++) {
+    for (let column = 0; column < 43; column++) {
+      const x = (column - 21) * 0.065;
+      const y = (row - 11.5) * 0.065;
+      if (inside(x, y)) {
+        raised.push({ x, y, height: 0.12, base: 0.135 });
+      } else {
+        // A quiet six-column repeat gives the field horizontal correspondence.
+        const motif = (row * 5 + column % 6 * 3) % 17;
+        const color = motif === 1 ? 1 : motif === 8 ? 2 : motif === 13 ? 3 : 0;
+        pins[color].push({ x, y, height: 0.034, base: 0.064 });
+      }
+    }
+  }
+  const profile = [
+    [0, -0.5], [0.73, -0.5], [0.94, -0.42], [1, -0.25],
+    [1, 0.25], [0.94, 0.42], [0.73, 0.5], [0, 0.5],
+  ].map(([radius, y]) => new THREE.Vector2(radius, y));
+  const pinGeometry = new THREE.LatheGeometry(profile, 12);
+  const pinRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+  const addPins = (positions, material, name, radius = 0.022) => {
+    const instances = new THREE.InstancedMesh(pinGeometry, material, positions.length);
+    instances.name = name;
+    instances.castShadow = true;
+    instances.receiveShadow = true;
+    const matrix = new THREE.Matrix4();
+    positions.forEach(({ x, y, height, base }, i) => {
+      matrix.compose(new THREE.Vector3(x, y, base + height / 2), pinRotation,
+        new THREE.Vector3(radius, height, radius));
+      instances.setMatrixAt(i, matrix);
+    });
+    instances.instanceMatrix.needsUpdate = true;
+    group.add(instances);
+  };
+  pins.forEach((positions, i) => addPins(positions, fieldMaterials[i], 'Low repeated stereogram enamel pins'));
+  addPins(raised, pinGreen, 'Raised forest-green pins forming the running T-Rex');
+  addPins([
+    { x: -0.13, y: 0.862, height: 0.024, base: 0.055 },
+    { x: 0.13, y: 0.862, height: 0.024, base: 0.055 },
+  ], silhouetteGreen, 'Two subtle parallel-view alignment dots', 0.017);
+  // Keep a restrained three-quarter pose beneath the shared viewer tilt, so
+  // the frame thickness and raised pins remain visible before interaction.
+  const presentation = new THREE.Matrix4().makeRotationY(-Math.PI / 15);
+  group.children.forEach(part => part.applyMatrix4(presentation));
   return group;
 }

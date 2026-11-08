@@ -30,7 +30,7 @@ test('Voice Laser Lab project and static app', async t => {
       const appRequests = [];
       page.on('request', request => { if (request.url().startsWith(app)) appRequests.push(request.url()); });
       await page.goto(base);
-      assert.equal(await page.locator('.project-card').count(), 4);
+      assert.equal(await page.locator('.project-card').count(), 5);
       const logo = page.locator(selector), link = page.locator('.project-link').filter({has: logo});
       await logo.scrollIntoViewIfNeeded();
       await page.waitForSelector(`${selector}.is-ready canvas`);
