@@ -113,7 +113,7 @@ The shared navigation links to Notes, Projects, Publications ([scholar](https://
 
 ## Project cards
 
-The homepage Projects section links directly to [Read the Room](https://readtheroom.site/), [Rizome Biotech](https://www.rizomebiotech.ai/), the local [Molecular Game of Life](projects/molecular-game-of-life/), [Voice Laser Lab](projects/voice-laser-lab/), and [Stereogram Runner](projects/stereogram-runner/). Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
+The homepage Projects section lists [Voice Laser Lab](projects/voice-laser-lab/), [Stereogram Runner](projects/stereogram-runner/), [Molecular Game of Life](projects/molecular-game-of-life/), [Read the Room](https://readtheroom.site/), and [Rizome Biotech](https://www.rizomebiotech.ai/), in that order. Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
 
 The logos use real beveled geometry with raised details: Read the Room's chameleon, Rizome's branching medallion, a molecule transitioning into five enamel glider tiles, a membrane/mirror laser apparatus with a raised Lissajous trace, and a T-Rex depth relief rising through an enamel pin-art panel. The external visual references are the sites' [chameleon mark](https://readtheroom.site/images/RTR-logo_Aug2025.png) and [Rizome mark](https://www.rizomebiotech.ai/favicon.png). The geometry is a stylized adaptation; the project names and marks identify their respective projects.
 
@@ -121,7 +121,7 @@ Cards are ordinary links with decorative 3D views. The scenes initialize near th
 
 ## Voice Laser Lab
 
-The fourth project card opens `projects/voice-laser-lab/`, a static browser build
+The Voice Laser Lab card opens `projects/voice-laser-lab/`, a static browser build
 of the separate Voice Laser Lab project. Sound drives a six-mode membrane model;
 a small mirror reflects the laser onto a projection wall. Demo tones, local
 audio files, microphone input, recording, replay, and session ZIP export run in
@@ -161,7 +161,7 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs BROWSER_CHANNEL=chrome node tool
 The helper renders a 720×440 still through the actual card viewer. The same helper
 accepts `readtheroom`, `rizome`, `mol-cgl`, and `stereogram-runner` when their geometry changes.
 
-With a local server running, the browser checks cover the fourth card, keyboard
+With a local server running, the browser checks cover the Voice Laser Lab card, keyboard
 navigation, reduced motion, PNG fallbacks, nested app assets, and demo playback:
 
 ```sh
@@ -174,7 +174,7 @@ Run it against the nested Pages route after changing the export or asset paths.
 
 ## Stereogram Runner
 
-The fifth project card opens `projects/stereogram-runner/`. The source folder is
+The Stereogram Runner card opens `projects/stereogram-runner/`. The source folder is
 still named `stereogram-studio`, but its current app is Stereogram Runner: a
 keyboard-controlled dinosaur game inside a moving multicolor autostereogram.
 Space or ↑ starts and jumps; pause and the viewing guide preserve game state.

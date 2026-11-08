@@ -12,7 +12,7 @@ test('Voice Laser Lab project and static app', async t => {
     args: ['--enable-unsafe-swiftshader'],
   });
   try {
-    await t.test('fourth card renders, tilts on focus, and respects reduced motion', async () => {
+    await t.test('Voice Laser Lab card renders, tilts on focus, and respects reduced motion', async () => {
       const page = await browser.newPage();
       await page.addInitScript(() => {
         window.__voiceLogoDraws = 0;

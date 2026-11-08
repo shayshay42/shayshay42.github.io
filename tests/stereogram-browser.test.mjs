@@ -11,7 +11,7 @@ test('Stereogram Runner project and nested app', async t => {
     args: ['--enable-unsafe-swiftshader'],
   });
   try {
-    await t.test('fifth card renders, responds to focus, and keeps the game lazy', async () => {
+    await t.test('Stereogram Runner card renders, responds to focus, and keeps the game lazy', async () => {
       const page = await browser.newPage();
       await page.addInitScript(() => {
         window.__stereogramLogoDraws = 0;
