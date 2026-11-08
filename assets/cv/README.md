@@ -17,7 +17,7 @@ The October 28 neutrophil-trap paper is a bioRxiv preprint in auxiliary publicat
 
 The website also lists WeLD as a manuscript, so its bibliography has eleven
 works and three presentations. The private draft PDF and manuscript sources
-remain outside the website repository. Keep CV sources, PDFs, publication page,
+remain outside the website repository. Keep CV sources, PDFs, publication section in `index.html`,
 and BibTeX consistent when updating shared metadata.
 
 The personal phone number and secondary GitHub profile are omitted from both

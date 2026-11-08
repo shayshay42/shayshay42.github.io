@@ -41,11 +41,11 @@ Visit http://localhost:4173. No build or npm install is required. Typography use
 
 ## Editing
 
-- `index.html`: biography, research links, note list, project cards, and sharpener viewer.
+- `index.html`: the canonical scrolling homepage: biography, notes, project cards, publications, talks, patents, selected code, and auxiliary publications.
 - `style.css`: layout, typography, responsive rules, enamel palette.
 - `portrait-viewer.js`, `portrait.css`: subtle CSS depth and pointer/focus tilt for the homepage portrait, with reduced-motion support.
 - `assets/portrait/`: original photo, transparent silhouette cutout, decorative chalk vectors, and masking instructions. The portrait links to LinkedIn and works without JavaScript or WebGL.
-- `publications.html`: preprints, manuscripts, patents and their status, archive links, and research code.
+- `publications.html`: compatibility redirect to the homepage record; old paper, talk, and patent fragments are retained. Edit record content in `index.html`.
 - `assets/publications.bib`: full-author BibTeX citations for eleven papers/manuscripts and three presentations.
 - `assets/cv/`: downloadable English and French CVs, with editable LaTeX sources in `source/`.
 - `math.js`: shared LaTeX rendering for all `.blog-post` articles.
@@ -79,7 +79,24 @@ Paths in `provenance.json` identify files in the original research workspace; th
 
 ## Publications and profile
 
-`publications.html` lists eleven named works: seven main research articles/manuscripts (including the WeLD research draft) and four entries under “Auxiliary publications,” including the retained nanobody manuscript. `assets/publications.bib` includes full author lists for all eleven works and citations for all three presentations.
+The site presents the full research record on one scrolling homepage. The header
+Publications link targets `#publications` without loading another document.
+The record follows the projects and is ordered as: main publications, talks and
+presentations, patents, selected code, and auxiliary publications last. Talks
+appear once, within this record. Native anchors also work without JavaScript;
+smooth scrolling respects reduced-motion preferences.
+
+Old `publications.html` links redirect to `index.html` while preserving their
+fragment (for example `#iclr-submission`, `#nanobody`, or `#talks`). An empty
+fragment or the former `#main` points to `#publications`. Without JavaScript,
+the fallback opens the homepage record. This keeps existing CV and shared links
+working. There is no second publication-content page to maintain. Blog and
+molecular-playground navigation also points to the homepage section.
+
+`tests/publications-browser.test.mjs` checks the record order, retained metadata,
+same-document navigation, keyboard/reduced-motion behavior, and old URL redirects.
+
+The homepage `#publications` section lists eleven named works: seven main research articles/manuscripts (including the WeLD research draft) and four entries under “Auxiliary publications,” including the retained nanobody manuscript. `assets/publications.bib` includes full author lists for all eleven works and citations for all three presentations.
 
 On October 14, 2026, the author authorized publishing the titles previously withheld during anonymous review and supplied these updates:
 
@@ -98,7 +115,7 @@ The Patents section uses the author's PCT request excerpt: the hematopoietic str
 
 The English and French CVs use the author-approved research-focused layout, emphasizing world models, representation learning, system identification, and control. The French version was synchronized with the latest hand-edited English source on November 5, 2026 at the author's request. Both include ten works, three presentations, and WeLD as a research project below the cross-modal world-model work. See `assets/cv/README.md` for build instructions. Both public CVs omit the personal phone number and use `[at]` and `[dot]` in the personal email, without a mailto link. CV (EN/FR) links appear in every page's navigation and beneath the publications heading. Keep both CV sources and PDFs, page entries, and BibTeX consistent when metadata changes.
 
-The homepage, publications page, and both CVs list:
+The homepage publication record and both CVs list:
 
 - **Real-MVP**, invited oral presentation at SIAM Life Sciences, Cleveland, Ohio, July 6, 2026, MS11. The [official talk entry](https://meetings.siam.org/sess/dsp_talk.cfm?p=157552) and [session schedule](https://meetings.siam.org/sess/dsp_programsess.cfm?sessioncode=88781) supply event details; invited status is author-confirmed.
 - **Weak-Form Distillation for Label-Free PDE Inverse Problems**, Cedrique Shum-Tim and Shayan Hajhashemi, accepted oral presentation at [World Modeling for Physics](https://wmw-aspen.github.io/), Aspen Center for Physics, Aspen, Colorado, February 28–March 5, 2027. Acceptance is author-confirmed. It is marked upcoming until the event takes place.
