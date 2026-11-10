@@ -1,9 +1,10 @@
 // Rebuild the separate app and copy its static export into this website.
 // Usage: node tools/sync-voice-laser-lab.mjs ../voice-laser-lab
 import { spawnSync } from 'node:child_process';
-import { cp, mkdir, readFile, readdir, rm } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { addSiteAnalytics } from './site-analytics.mjs';
 
 const input = process.argv[2];
 if (!input) throw new Error('Provide the Voice Laser Lab source directory.');
@@ -29,6 +30,7 @@ try {oldAssets = await readdir(path.join(destination, 'assets'));} catch (error)
   if (error.code !== 'ENOENT') throw error;
 }
 await cp(output, destination, {recursive: true});
+await writeFile(path.join(destination, 'index.html'), addSiteAnalytics(html));
 for (const name of oldAssets) {
   if (/^index-[\w-]+\.(?:js|css)$/.test(name) && !newAssets.has(name)) {
     await rm(path.join(destination, 'assets', name));

@@ -103,7 +103,7 @@ test('Voice Laser Lab project and static app', async t => {
       // Chromium does not emit page-level request events for AudioWorklet fetches.
       // Successful playback above exercises addModule; also check its served URL.
       assert.equal((await page.request.get(app + 'generated/audio-processor.js')).status(), 200);
-      assert.ok(requests.filter(url => /^https?:/.test(url)).every(url => url.startsWith(app)), 'The app must only fetch its own static assets.');
+      assert.ok(requests.filter(url => /^https?:/.test(url)).every(url => url.startsWith(app) || url === `${base}/analytics.js`), 'The local app must only fetch its static assets and the shared analytics loader.');
       assert.deepEqual(failures, []); assert.deepEqual(errors, []);
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       await page.getByRole('link', {name:'Back to the notebook'}).click();

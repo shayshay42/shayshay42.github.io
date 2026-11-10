@@ -91,7 +91,7 @@ test('Stereogram Runner project and nested app', async t => {
       assert.equal(await page.getByTestId('runner').getAttribute('data-status'),'paused');
       await page.setViewportSize({width:390,height:844});
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-      assert.ok(requests.filter(url=>/^https?:/.test(url)).every(url=>url.startsWith(app)));
+      assert.ok(requests.filter(url=>/^https?:/.test(url)).every(url=>url.startsWith(app)||url===`${base}/analytics.js`));
       assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
       await page.getByRole('link',{name:'Back to the notebook'}).click();await page.waitForURL(`${base}/#projects`);
       await page.close();

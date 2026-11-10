@@ -79,6 +79,38 @@ The November 10, 2026 prose revision preserves the author's saved titles and ope
 
 Paths in `provenance.json` identify files in the original research workspace; they are provenance references, not website dependencies.
 
+## Analytics
+
+`analytics.js` loads Umami Cloud on `https://shayshay42.github.io` using website ID
+`42412014-5b93-4857-9db8-9bb357a3c29b`. The homepage, notes, and hosted playgrounds
+share this loader. The legacy publications redirect and development tools do not
+load it. Local previews do not request the tracker or send events.
+
+Umami records page views and referral information. The loader excludes URL queries
+and fragments, so scrolling between homepage sections does not create page views.
+It respects browser Do Not Track and Global Privacy Control signals.
+
+Custom events use fixed names:
+
+| Action | Event |
+| --- | --- |
+| English or French CV link | `CV English`, `CV French` |
+| Project card | `Open Voice Laser Lab`, `Open Stereogram Runner`, `Open Molecular Game of Life`, `Open Read the Room`, `Open Rizome Biotech` |
+| First successful playground start per page load | `Start Voice Laser Lab`, `Start Stereogram Runner`, `Start Molecular Game of Life` |
+
+CV events count link clicks, not completed downloads. Start events also work with
+keyboard controls and do not count resumes again. No event properties contain
+molecule inputs, uploaded filenames, audio, or recordings. Session replay and
+error tracking are not enabled. Analytics failures do not block links or controls.
+
+Both app sync scripts apply `tools/site-analytics.mjs` after copying their exports,
+so rebuilding a playground retains the shared loader. The standalone app sources
+do not contain this website's tracking ID. The site uses Umami's hosted dashboard;
+no analytics server or database runs on GitHub Pages.
+
+`tests/analytics-browser.test.mjs` checks tracking behavior with a mocked collector
+so test runs do not add visits to the dashboard.
+
 ## Publications and profile
 
 The site presents the full research record on one scrolling homepage. The header
