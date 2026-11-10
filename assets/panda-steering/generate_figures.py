@@ -95,7 +95,6 @@ def toy_panel(data, directory):
     ax.set_ylabel("State coordinate $z_2$", labelpad=7)
     style_axis(ax)
     ax.grid(alpha=.12, color=MUTED)
-    fig.suptitle("Toy system", y=.98, fontsize=19, color=INK, fontweight="bold")
     handles, labels = ax.get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(.52, .915),
                ncol=2, frameon=False, fontsize=13, columnspacing=1.1, handlelength=1.3)

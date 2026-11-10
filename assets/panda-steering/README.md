@@ -13,7 +13,7 @@ fit a model, or create new experimental outcomes.
 Each panel also has a vector PDF. The article pairs the two control panels as
 one figure; their axes use the same no-edit normalization and logarithmic range.
 
-The November 10, 2026 revision shortens the toy title and removes narrative
+The November 10, 2026 revision removes the toy title and narrative
 annotations from the control panels. The saved data and plotted values are unchanged.
 
 ## Regenerate
