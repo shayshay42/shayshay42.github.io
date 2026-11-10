@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="An exploration of activation steering in PANDA, the search for a Hopf-like transition, and learning a world model of a forecasting model's internal computation.">
+  <meta name="description" content="Activation steering in PANDA and a small world model for planning edits to its internal activations.">
   <title>Looking for a bifurcation inside an LLM &mdash; Shayan Hajhashemi</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../style.css">
@@ -32,58 +32,41 @@
     <main id="main">
       <article class="blog-post panda-post">
         <header class="post-header"><p class="muted">Research note &middot; Draft &middot; September 2026</p><h1>Looking for a bifurcation inside an LLM</h1></header>
-        <p>Wouldn&rsquo;t it be interesting if a small change inside a time-series foundation model could push it through a bifurcation? Imagine turning a knob in its activations: below some threshold, disturbances fade; above it, an oscillation sustains itself. That was the starting thought. I wanted to explore whether activation steering could become a way of probing a model&rsquo;s dynamics.</p>
-        <p>I used <a href="https://github.com/abao1999/panda">PANDA</a>, a pretrained forecasting transformer for nonlinear dynamics. The experiments moved from editing a single forecast to feeding predictions back into the model. Along the way, another possibility became more interesting: learning a small world model of PANDA&rsquo;s own internal computation, then using it to plan activation edits.</p>
+        <p>Wouldn&rsquo;t it be interesting if a small change inside a time-series foundation model could push it through a bifurcation? I imagined a knob that could turn a fading disturbance into a sustained oscillation.</p>
+        <p>I used <a href="https://github.com/abao1999/panda">PANDA</a>, a pretrained forecasting transformer. This led me toward a second question: could a small world model learn how to steer its internal activations?</p>
 
         <section aria-labelledby="intuition-title">
-          <h2 id="intuition-title">A parameter for oscillation</h2>
-          <p>The picture I had in mind was a Hopf bifurcation: changing a parameter can destabilize an equilibrium and give rise to periodic motion. The toy example below makes that intuition visible. With one parameter setting, a trajectory spirals toward the origin. With another, it approaches a repeating orbit.</p>
+          <h2 id="intuition-title">A knob for dynamics</h2>
+          <p>A Hopf bifurcation was the starting idea. The toy system below illustrates a related discrete transition: a parameter changes whether motion decays or persists.</p>
           <figure class="research-figure panda-figure panda-single">
-            <a href="../assets/panda-steering/toy-phase.png" target="_blank" rel="noopener" aria-label="Open the full-size toy phase portrait"><img src="../assets/panda-steering/toy-phase.png" width="1100" height="960" decoding="async" alt="A separate two-dimensional toy system: one trajectory spirals into the origin while another spirals outward toward a repeating orbit. This is not a PANDA trajectory."></a>
-            <figcaption>A separate toy system, used to illustrate the transition I hoped to find. This discrete map changes from contraction to an attracting invariant circle as its parameter crosses zero. Its chosen rotation makes motion on the circle repeat every 32 steps. <a href="../assets/panda-steering/toy-phase.pdf" download>PDF</a></figcaption>
+            <a href="../assets/panda-steering/toy-phase.png" target="_blank" rel="noopener" aria-label="Open the full-size toy phase portrait"><img src="../assets/panda-steering/toy-phase.png" width="1100" height="960" decoding="async" alt="Toy trajectories spiral toward the origin or approach a repeating orbit at different parameter values."></a>
+            <figcaption>A toy system changes from contraction to a repeating orbit.</figcaption>
           </figure>
-          <p>For a discrete update rule, the related transition is called a Neimark&ndash;Sacker bifurcation. A pair of complex eigenvalues crossing the unit circle would be part of the evidence to look for. Drawing a loop in a projection, or producing a sinusoidal forecast, would only be a starting observation.</p>
-        </section>
-
-        <section aria-labelledby="steering-title">
-          <h2 id="steering-title">A cycle in PANDA&rsquo;s forecast</h2>
-          <p>Activation steering gives us a candidate knob. Keep the weights and input fixed, intercept an internal activation \(h\), and add a vector:</p>
+          <p>In PANDA, I added a direction \(v\) to an activation \(h\), with strength \(\alpha\):</p>
           <div class="math-display" tabindex="0" role="region" aria-label="Activation steering update">
             \[h_{\mathrm{edited}}=h+\alpha v.\]
           </div>
-          <p>The direction \(v\) specifies the edit; \(\alpha\) sets its strength. A Jacobian measures how the forecast responds to a small edit. On simple sinusoidal inputs, input-specific Jacobian directions shifted forecast frequency by roughly 1% in either requested direction across all 96 tested cases. That encouraged a harder question: could a shared direction make a noise context produce a cycle?</p>
           <figure class="research-figure panda-figure">
-            <a href="../assets/panda-steering/panda-cycle.png" target="_blank" rel="noopener" aria-label="Open the full-size PANDA cycle example"><img src="../assets/panda-steering/panda-cycle.png" width="1280" height="880" loading="lazy" decoding="async" alt="The same white-noise input leads to a nearly flat unedited PANDA forecast and a clean four-cycle waveform after the final-head activation edit."></a>
-            <figcaption>Actual PANDA forecasts for the fixed first white-noise example, channel 0. The input is unchanged; its final 128 samples are shown. The H8 edit has strength 2 and acts through the linear output head. <a href="../assets/panda-steering/panda-cycle.pdf" download>PDF</a></figcaption>
+            <a href="../assets/panda-steering/panda-cycle.png" target="_blank" rel="noopener" aria-label="Open the full-size PANDA cycle example"><img src="../assets/panda-steering/panda-cycle.png" width="1280" height="880" loading="lazy" decoding="async" alt="PANDA forecasts a cycle after an activation edit. The unedited forecast stays nearly flat for the same noise input."></a>
+            <figcaption>A linear output-head edit adds a cycle to the forecast from the same noise input.</figcaption>
           </figure>
-          <p>Here is the clean example. The edited forecast contains a clear cycle, even though its context is noise. The location of the edit explains much of this result: PANDA&rsquo;s final head is a linear map, and its pseudoinverse lets us choose an activation vector that adds a desired waveform to the output. This is useful control, but it does not yet tell us that an internal oscillator has appeared. The shared directions tested at earlier layers did not produce equally clean cycles.</p>
-        </section>
-
-        <section aria-labelledby="feedback-title">
-          <h2 id="feedback-title">Closing the feedback loop</h2>
-          <p>To ask about sustained dynamics, I made a separate system: forecast from a rolling context, append only the first predicted sample, drop the oldest sample, and repeat. The same edit is applied at every call. Now the context is the evolving state, while steering strength is a persistent parameter. Unlike the single-forecast comparison, the input history changes as the loop runs.</p>
-          <p>I swept strengths and starting contexts and examined long trajectories and local stability. This was an exploratory bifurcation search. Most trajectories reached the preset magnitude cutoff; extending every initial survivor to 8,192 steps still produced no sustained-cycle candidates. Local stability checks also showed instability, without establishing an oscillatory transition.</p>
-          <p>So this experiment did not establish a Hopf-like bifurcation in PANDA. It leaves the original question open, while showing how much the feedback rule matters. A model trained to predict a block of samples need not behave well when only one sample is repeatedly fed back.</p>
+          <p>I chose the edit through the head&rsquo;s pseudoinverse to add the desired waveform. I then fed predictions into the next forecast and repeated the edit. The feedback runs produced no sustained-cycle candidates.</p>
         </section>
 
         <section aria-labelledby="world-model-title">
           <h2 id="world-model-title">A world model of the model</h2>
-          <p>The part I find most intriguing is treating the frozen network itself as a system we can learn to control. Observe its activations, apply an edit, run the next block, and record what changed. These tuples form an offline dataset of states, actions, and successors.</p>
-          <p>Inspired by <a href="https://arxiv.org/abs/2606.20104">sensorimotor world models</a>, I trained an encoder to compress each 49,152-coordinate activation into 64 coordinates. A forward model predicts the next latent state given an edit; an inverse model tries to recover which edit caused a transition. The hope is that learning both directions will preserve controllable information. A matched PCA representation provides a simpler comparison.</p>
-          <p>Planning then becomes a small loop: imagine several edits within a fixed eight-dimensional edit space, choose a sequence that approaches the goal, execute its first edit in real PANDA, observe the new activation, and replan. Here a step advances through transformer depth, from H2 toward H6. It does not advance time in the feedback experiment above.</p>
+          <p>Inspired by <a href="https://arxiv.org/abs/2606.20104">sensorimotor world models</a>, I compressed activations into 64 coordinates. A forward model predicted how edits changed later activations. An inverse model learned to recover the edit from that change.</p>
+          <p>A planner used this smaller model to choose edits toward a target. Each step advanced through transformer layers.</p>
           <figure class="research-figure panda-figure">
             <div class="panda-panels">
-              <a href="../assets/panda-steering/activation-control.png" target="_blank" rel="noopener" aria-label="Open the reachable-activation control results"><img src="../assets/panda-steering/activation-control.png" width="1100" height="880" loading="lazy" decoding="async" alt="For supplied reachable activation goals, PCA planning leaves about 5 to 6 percent of the no-edit squared error, SMWM about 73 to 74 percent, and direct PANDA optimization substantially less."></a>
-              <a href="../assets/panda-steering/waveform-control.png" target="_blank" rel="noopener" aria-label="Open the requested-waveform control results"><img src="../assets/panda-steering/waveform-control.png" width="1100" height="880" loading="lazy" decoding="async" alt="For requested waveforms, both learned controllers remain near the no-edit error while direct PANDA optimization reaches a median error ratio of about 0.014."></a>
+              <a href="../assets/panda-steering/activation-control.png" target="_blank" rel="noopener" aria-label="Open the reachable-activation control results"><img src="../assets/panda-steering/activation-control.png" width="1100" height="880" loading="lazy" decoding="async" alt="PCA planning reaches activation targets more closely than SMWM. Direct PANDA optimization has the lowest error."></a>
+              <a href="../assets/panda-steering/waveform-control.png" target="_blank" rel="noopener" aria-label="Open the requested-waveform control results"><img src="../assets/panda-steering/waveform-control.png" width="1100" height="880" loading="lazy" decoding="async" alt="Learned controllers leave waveform error near the unedited baseline. Direct PANDA optimization reduces it."></a>
             </div>
-            <figcaption>Actual outcomes after executing the plans in PANDA. Each marker is one seed&rsquo;s median over the same 128 contexts; lower squared-error ratios are better. Activation goals are recorded reachable endpoints, supplied without the actions that produced them. <a href="../assets/panda-steering/activation-control.pdf" download>Activation PDF</a> &middot; <a href="../assets/panda-steering/waveform-control.pdf" download>Waveform PDF</a></figcaption>
+            <figcaption>Each dot is one seed&rsquo;s median error ratio over 128 inputs. A ratio of one matches the unedited error.</figcaption>
           </figure>
-          <p>The two goals gave different answers. PCA planning reduced median error toward a supplied activation target by about 94&ndash;95%; the learned representation achieved about 26&ndash;27%. Asking either learned controller for a particular waveform was much less successful: typical errors stayed near the no-edit baseline. Direct optimization through PANDA did much better, although it required more computation.</p>
-          <p>The learned model recovered actions accurately, but its waveform readout remained weak. That makes the representation question interesting: which coordinates preserve the consequences of an intervention, rather than merely identifying that it happened?</p>
-          <p>I still like the bifurcation question. Perhaps useful steering coordinates could eventually let us chart behavioral regimes and search for transitions between them. For now, the open problem is more basic: can we learn an activation space in which a desired change in behavior becomes a predictable trajectory?</p>
+          <p>PCA planning reduced median error toward an activation target by about 94–95%. The learned representation reduced it by about 26–27%. Both struggled to produce a requested waveform. Direct optimization through PANDA reached it more closely, at greater computational cost.</p>
+          <p>Can we learn an activation space where a desired change in behavior becomes a predictable trajectory?</p>
         </section>
-
-        <p class="post-sources">Figure data and provenance: <a href="../assets/panda-steering/figure-data.json" download>saved values</a>, <a href="../assets/panda-steering/provenance.json">source records</a>, and <a href="../assets/panda-steering/generate_figures.py" download>figure script</a>. The toy, forecast-edit, feedback, and world-model experiments are separate; the figures are redrawn from their saved results.</p>
       </article>
     </main>
     <footer class="site-footer"><a href="../index.html#notebook">&larr; Back to the notebook</a><span>Shayan Hajhashemi</span></footer>

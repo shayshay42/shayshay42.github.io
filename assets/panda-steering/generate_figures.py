@@ -95,7 +95,7 @@ def toy_panel(data, directory):
     ax.set_ylabel("State coordinate $z_2$", labelpad=7)
     style_axis(ax)
     ax.grid(alpha=.12, color=MUTED)
-    fig.suptitle("Toy system—not PANDA", y=.98, fontsize=19, color=INK, fontweight="bold")
+    fig.suptitle("Toy system", y=.98, fontsize=19, color=INK, fontweight="bold")
     handles, labels = ax.get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(.52, .915),
                ncol=2, frameon=False, fontsize=13, columnspacing=1.1, handlelength=1.3)
@@ -154,8 +154,6 @@ def control_panel(data, directory, objective):
     ax.grid(axis="y", color=MUTED, alpha=.12)
     title = "Reachable activation target" if objective == "activation" else "Requested waveform target"
     fig.suptitle(title, y=.97, fontsize=18, color=INK, fontweight="bold")
-    fig.text(.57, .865, "Actual PANDA outcomes · lower is better", ha="center", fontsize=12, color=MUTED)
-    fig.text(.57, .035, "3 seeds · the same 128 held-out inputs", ha="center", fontsize=12, color=MUTED)
     return save(fig, directory, stem)
 
 

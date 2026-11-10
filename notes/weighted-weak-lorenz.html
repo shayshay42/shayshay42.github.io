@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Weak-form and endpoint-weighted SINDy on noisy Lorenz63 data, with integral matching, pretrained forecasting, and a later Panda-to-SINDy experiment.">
-  <title>Weak forms, weighted windows, and Lorenz &mdash; Shayan Hajhashemi</title>
+  <meta name="description" content="Weak-form SINDy on noisy Lorenz63 data, compared with endpoint weighting and foundation-model forecasts.">
+  <title>Weak formulation and Birkhoff weighting vs Timeseries Foundation models &mdash; Shayan Hajhashemi</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../assets/vendor/katex-0.18.9/katex.min.css">
@@ -31,102 +31,38 @@
     </header>
     <main id="main">
       <article class="blog-post">
-        <header class="post-header"><p class="muted">Research note &middot; Draft &middot; Updated September 2026</p><h1>Weak forms, weighted windows, and Lorenz</h1></header>
-        <p>Can an integrated equation make learned dynamics more robust to noisy observations? In this Lorenz63 benchmark, weak-form SINDy gives up some clean-data efficiency but degrades much more slowly as training noise rises. Giving less weight to windows near the ends of a trajectory does not add a consistent benefit.</p>
-        <p>The newer experiments sharpen that result rather than replacing it. Known-form integral matching remains strong, direct foundation-model forecasts are useful but belong to a different information track, and a weakly trained Panda-to-SINDy conditioner improves on unseen source systems but fails a reserved Lorenz gate.</p>
+        <header class="post-header"><p class="muted">Research note &middot; Draft &middot; Updated September 2026</p><h1>Weak formulation and Birkhoff weighting vs Timeseries Foundation models</h1></header>
+        <p>I took Lorenz63 as a benchamark to explore how different existing methods do at forcasting chaotic dynamics... I asked: Does the weak formualtion give us the robustness we need? Does weighted Birkhoff averaging from front page SIAM news help even more? And does any method do any better than SINDy with its tuned prior...?</p>
+        <p>Empirically we saw that, weak-form SINDy gives up some clean-data efficiency but degrades much more slowly as training noise rises. Giving less weight to windows near the ends of a trajectory does not add a consistent benefit...</p>
+        <!-- <p>Direct foundation-model forecasts are useful but belong to a different information track, and a weakly trained Panda-to-SINDy conditioner improves on unseen source systems but fails a reserved Lorenz gate.</p> -->
 
         <figure class="research-figure">
-          <section class="figure-scroll" aria-label="Scrollable Lorenz forecast-survival figure" tabindex="0"><a href="../assets/lorenz/forecast-survival.png" target="_blank" rel="noopener" aria-label="Open the full-size Lorenz forecast-survival figure in a new tab"><img src="../assets/lorenz/forecast-survival.png" width="4222" height="1623" decoding="async" alt="Three forecast-survival panels at 0.1%, 1%, and 5% benchmark training noise. Solid curves show state-only learned dynamics, dashed curves include known-form integral and automatic-differentiation Lorenz fits, dotted curves show known-physics surrogates, and dash-dot curves show fixed clean-prefix Panda and Chronos-T5 forecasts. A compact boxed legend below the panels groups all 16 methods into four information-track columns, each headed by its line style."></a></section>
-          <figcaption>Forecast survival through five Lyapunov times. Each curve is the fraction of trajectories whose error has remained below the threshold. Solid, dashed, dotted, and dash-dot lines distinguish state-only learning, known equation form with hidden parameters, known-physics forward surrogates, and externally pretrained sequence forecasting. Panda and Chronos receive a fixed 512-sample clean test prefix and are repeated across panels because they do not train on the panel's noisy split. Here &ldquo;zero-shot&rdquo; means no target-time optimization; it does not certify that Lorenz was excluded from pretraining. <a href="../assets/lorenz/forecast-survival.png" target="_blank" rel="noopener">Open full-size figure &nearr;</a> &middot; <a href="../assets/lorenz/forecast-survival.pdf" download>Download PDF</a></figcaption>
+          <section class="figure-scroll" aria-label="Scrollable Lorenz forecast-survival figure" tabindex="0"><a href="../assets/lorenz/forecast-survival.png" target="_blank" rel="noopener" aria-label="Open the full-size Lorenz forecast-survival figure in a new tab"><img src="../assets/lorenz/forecast-survival.png" width="4222" height="1623" decoding="async" alt="Forecast survival as training noise rises. Weak-form SINDy retains accurate forecasts longer than strong-form SINDy at high noise."></a></section>
+          <figcaption>Each curve shows the fraction of forecasts that remain below the error threshold. Panda and Chronos use a clean 512-sample prefix.</figcaption>
         </figure>
 
-        <section aria-labelledby="setup-title">
-          <h2 id="setup-title">The benchmark</h2>
-          <p>The reference system is Lorenz63, with \(\sigma = 10\), \(\rho = 28\), and \(\beta = 8/3\):</p>
-          <div class="math-display" tabindex="0" role="region" aria-label="Lorenz63 differential equations">
-            \[\begin{aligned}
-              \frac{\mathrm{d}x}{\mathrm{d}t} &amp;= 10(y-x), \\
-              \frac{\mathrm{d}y}{\mathrm{d}t} &amp;= x(28-z)-y, \\
-              \frac{\mathrm{d}z}{\mathrm{d}t} &amp;= xy-\frac{8}{3}z.
-            \end{aligned}\]
-          </div>
-          <p>After a 100-time-unit spin-up, states are sampled every 0.01 time units. Each of five final splits contains 64 training trajectories of length 20, 32 validation initial conditions, and 128 held-out test initial conditions. Hyperparameters are selected on a separate development split and then frozen. Gaussian noise is added only to training observations, at 0%, 0.1%, 1%, or 5% of each coordinate's clean training standard deviation.</p>
-          <p>Forecast quality is measured by valid prediction time, or VPT. It ends when normalized squared state error first exceeds 0.4 and is reported in Lyapunov times, \(\lambda_{\max}t\), with \(\lambda_{\max}\approx 0.9134\). A survival curve asks what fraction of forecasts have remained valid up to each time.</p>
-        </section>
-
         <section aria-labelledby="weak-title">
-          <h2 id="weak-title">Moving the derivative off the data</h2>
-          <p><strong>Strong SINDy</strong> estimates time derivatives from observed states and fits a polynomial vector field. That derivative estimate is fragile under noise. <strong>Weak SINDy</strong> instead fits integrated equations. For a compact test function \(\phi\) and candidate library \(\Theta\), integration by parts gives</p>
+          <h2 id="weak-title">Weak equations</h2>
+          <p>SINDy fits a vector field from observed states. Estimating their time derivatives amplifies noise. A weak formulation fits integrated equations instead:</p>
           <div class="math-display" tabindex="0" role="region" aria-label="Weak-form equation after integration by parts">
             \[-\int x(t)\phi'(t)\,\mathrm{d}t
               =\int\Theta(x(t))\Xi\phi(t)\,\mathrm{d}t.\]
           </div>
-          <p>The derivative acts on the known test function rather than the noisy observations. The implementation uses 81-sample windows, a 20-sample stride, four polynomial&ndash;Legendre test functions, and trapezoidal quadrature. The weak variants share a degree-two library and the same fitting settings.</p>
-          <p><strong>Endpoint-weighted weak SINDy</strong> leaves each local weak integral unchanged, then weights the resulting regression rows by the window center. The smooth taper is</p>
+          <p>The test function \(\phi\) vanishes at the window boundaries. Its derivative replaces the noisy data derivative. The library \(\Theta\) contains candidate terms, and \(\Xi\) holds their fitted coefficients.</p>
+          <p>Endpoint weighting gives less influence to windows near the ends of a trajectory. For a window centered at relative position \(s\), the taper is</p>
           <div class="math-display" tabindex="0" role="region" aria-label="Smooth endpoint taper">
             \[w(s)=\exp\!\left(4-\frac{1}{s(1-s)}\right),\qquad 0&lt;s&lt;1.\]
           </div>
-          <p>The endpoint weights are zero and are normalized to unit mean. Both sides of each regression row are multiplied by \(\sqrt{w}\). Uniform weights exactly recover the unweighted weak fit. The frozen threshold is zero, so these benchmark runs test estimation rather than sparse-term pruning; the quadratic library already contains the true Lorenz terms.</p>
+          <p>It weights the regression rows while leaving each local weak integral unchanged.</p>
         </section>
 
         <section aria-labelledby="core-results-title">
-          <h2 id="core-results-title">The core result</h2>
-          <p>The accepted benchmark gives these restricted mean VPTs over the full valid evaluation horizon. Higher is better.</p>
-          <section class="results-table" aria-label="Core SINDy results; scroll horizontally on a narrow screen" tabindex="0">
-            <table><caption>Restricted mean VPT (LT).</caption><thead><tr><th scope="col">Training noise</th><th scope="col">Strong</th><th scope="col">Weak</th><th scope="col">Weighted weak</th></tr></thead><tbody>
-              <tr><th scope="row">0%</th><td>8.268</td><td>6.911</td><td>6.903</td></tr>
-              <tr><th scope="row">0.1%</th><td>6.616</td><td>6.933</td><td>6.968</td></tr>
-              <tr><th scope="row">1%</th><td>4.781</td><td>6.489</td><td>6.167</td></tr>
-              <tr><th scope="row">5%</th><td>3.037</td><td>4.763</td><td>4.656</td></tr>
-            </tbody></table>
-          </section>
-          <p>At 5% noise, weak SINDy retains about 1.73 more Lyapunov times than strong SINDy. Their 95% bootstrap intervals are 4.623&ndash;4.915 and 2.824&ndash;3.241 LT. Weighted weak SINDy reaches 4.656 LT, with an interval of 4.383&ndash;5.060 LT.</p>
-          <p>The supported claim is weak-form noise robustness. Endpoint weighting is nearly neutral on clean data, slightly ahead at 0.1% noise, and behind the unweighted weak fit at 1% and 5%. This benchmark does not support a consistent advantage from the extra taper.</p>
+          <h2 id="core-results-title">Reading the curves</h2>
+          <p>The benchmark adds Gaussian noise to training observations. It tests forecasts from held-out initial conditions.</p>
+          <p>A forecast remains valid until its normalized squared error exceeds 0.4. The horizontal axis measures time in Lyapunov units.</p>
+          <p>At 5% noise, weak SINDy has a restricted mean valid prediction time of 4.76 Lyapunov units over the evaluation horizon. Strong SINDy reaches 3.04.</p>
+          <p>SINDy&rsquo;s quadratic library already contains the Lorenz terms. The foundation models forecast directly from their input sequence.</p>
         </section>
-
-        <section aria-labelledby="extension-title">
-          <h2 id="extension-title">What the new curves add</h2>
-          <p><strong>Integral-matching Lorenz</strong> receives the exact equation form but not its parameters. It pools cumulative trapezoidal integral equations across training trajectories and solves one through-origin regression for each of \(\sigma\), \(\rho\), and \(\beta\). This avoids derivative estimation, but it has more structural information than state-only SINDy.</p>
-          <section class="results-table" aria-label="Extended Lorenz reference results; scroll horizontally on a narrow screen" tabindex="0">
-            <table><caption>Mean restricted VPT (LT) under different information contracts.</caption><thead><tr><th scope="col">Method</th><th scope="col">Input or noise</th><th scope="col">VPT</th></tr></thead><tbody>
-              <tr><th scope="row">Integral matching</th><td>0 / 0.1 / 1 / 5%</td><td>8.684 / 9.046 / 6.950 / 4.120</td></tr>
-              <tr><th scope="row">Panda</th><td>Clean 512-point prefix</td><td>2.217</td></tr>
-              <tr><th scope="row">Chronos-T5-small</th><td>Clean 512-point prefix</td><td>0.549</td></tr>
-            </tbody></table>
-          </section>
-          <p>Integral matching's mean parameter-relative error rises from 0.000089 on clean training data to 0.008950 at 5% noise. The small increase in VPT from 0% to 0.1% lies within estimator and split variation; it is not evidence that noise helps.</p>
-          <p>Panda is a multivariate forecaster. The Chronos adapter treats the three coordinates independently, predicts in 64-step blocks, and recursively appends those predictions. Their comparison supports Panda over this particular channel-wise Chronos adapter on canonical Lorenz, not a universal ranking of foundation models. Neither forecast curve is a common-information competitor to SINDy: both receive a clean test prefix, external pretraining, and no target-time fitting.</p>
-        </section>
-
-        <section aria-labelledby="conditioner-title">
-          <h2 id="conditioner-title">Can a pretrained model emit the equation?</h2>
-          <p>A later experiment asked for something harder than direct forecasting. A 128-sample prefix was mapped through a frozen 1,536-dimensional Panda embedding and an ordered one-layer GRU. A fusion network then emitted support and coefficient heads for a ten-term quadratic library across three state equations: one fixed autonomous SINDy model per prefix, with no target-time optimization or sparse-regression solve.</p>
-          <p>The architecture was trained on 1,024 trajectories from four non-Lorenz source families and selected on 128 Sprott-B trajectories. The matched ablation changed only the equation loss and a finite-horizon occupation-measure penalty:</p>
-          <section class="results-table" aria-label="Source validation results for the amortized SINDy conditioner; scroll horizontally on a narrow screen" tabindex="0">
-            <table><caption>Source-validation normalized rollout MSE. Lower is better.</caption><thead><tr><th scope="col">Training objective</th><th scope="col">MSE</th><th scope="col">Best epoch</th></tr></thead><tbody>
-              <tr><th scope="row">Strong residual</th><td>1.34582</td><td>5</td></tr>
-              <tr><th scope="row">Weak residual</th><td>1.19212</td><td>35</td></tr>
-              <tr><th scope="row">Strong + Birkhoff-MMD</th><td>1.34582</td><td>5</td></tr>
-              <tr><th scope="row">Weak + Birkhoff-MMD</th><td>1.19057</td><td>260</td></tr>
-            </tbody></table>
-          </section>
-          <p>The raw-GRU reference was 1.21226. Most of the improvement came from the derivative-free weak equation; the Birkhoff-MMD term added only 0.13% beyond weak form alone. Here Birkhoff-MMD is a tapered, finite-horizon comparison of predicted and true occupation measures. It is not invariant-measure recovery, and it is not Birkhoff averaging inside Panda. It is also distinct from the endpoint weighting above: that taper weights weak-regression rows, while this one weights forecast samples inside an offline training loss.</p>
-          <p>This was a one-seed comparison. All four arms eventually encountered non-finite source loss, so selection retained the best earlier finite checkpoint. Every arm also used Panda; the experiment therefore does not isolate a causal contribution from the foundation embedding.</p>
-          <p>The selected model then received one frozen audit on 16 reserved Lorenz prefixes. Every rollout was finite, but its mean normalized MSE was 2.38643 versus 2.28153 for copying the final context state: a ratio of 1.04598, or 4.60% worse. The source and held-out MSEs use slightly different normalization, so each should be read against its own registered baseline rather than compared directly. The gate failed, so the experiment stopped before CTF4Science. This is target-time zero-update inference, not verified dataset-exclusion zero-shot learning, because Panda's pretraining exposure is unknown.</p>
-        </section>
-
-        <section aria-labelledby="takeaway-title">
-          <h2 id="takeaway-title">What I take from it</h2>
-          <ul>
-            <li>When SINDy is fitted to noisy Lorenz data with the correct library, weak equations provide the clearest robustness gain.</li>
-            <li>The matched endpoint taper is an informative negative result: it does not consistently improve the weak fit.</li>
-            <li>Integral matching is strong when the equation form is known, but that is a different prior-information contract.</li>
-            <li>Foundation models can forecast dynamics directly, yet turning their representations into one stable global equation remains much harder.</li>
-            <li>The amortized weak objective helped across unseen source systems, but honest held-out gating showed that the improvement did not transfer to Lorenz.</li>
-          </ul>
-        </section>
-
-        <p class="post-sources">Code and evidence: <a href="https://github.com/shayshay42/weighted-weak-SINDy">benchmark repository</a>, <a href="https://github.com/shayshay42/weighted-weak-SINDy/blob/f62145b1a89acb1e143474f0b4cc50ac9821408b/docs/results/lorenz63_v2.md">core Lorenz results</a>, <a href="https://github.com/shayshay42/weighted-weak-SINDy/blob/f62145b1a89acb1e143474f0b4cc50ac9821408b/docs/results/tsfm_integral_survival_extension.md">survival extension</a>, and <a href="https://github.com/shayshay42/weighted-weak-SINDy/blob/f62145b1a89acb1e143474f0b4cc50ac9821408b/docs/results/weak_invariant_loss_ablation.md">conditioner audit</a>. Local data: <a href="../assets/lorenz/results.csv" download>core table</a>, <a href="../assets/lorenz/survival-extension.csv" download>extension summary</a>, <a href="../assets/lorenz/conditioner-results.csv" download>conditioner summary</a>, and <a href="../assets/lorenz/provenance.json">provenance</a>.</p>
       </article>
     </main>
     <footer class="site-footer"><a href="../index.html#notebook">&larr; Back to the notebook</a><span>Shayan Hajhashemi</span></footer>

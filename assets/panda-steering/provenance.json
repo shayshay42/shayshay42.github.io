@@ -59,9 +59,10 @@
     }
   ],
   "environment": {
-    "python": "3.11.12",
+    "python": "3.11.14",
     "numpy": "1.26.4",
-    "matplotlib": "3.11.0"
+    "matplotlib": "3.11.0",
+    "pillow": "13.0.0"
   },
   "selection": {
     "toy-phase": {
@@ -159,25 +160,25 @@
     "isolated_regeneration_from_script_and_compact_data_only": true,
     "all_eight_exports_byte_identical_after_regeneration": true,
     "verification_precision": "Toy float64 and PANDA float32, exact copied-array equality; medians reduced in float32.",
-    "portable_text_encoding": "UTF-8 with LF newlines, matching repository .gitattributes; numerical values and plot exports unchanged"
+    "portable_text_encoding": "UTF-8 with LF newlines, matching repository .gitattributes"
   },
   "generated_artifacts": [
     {
       "path": "toy-phase.png",
-      "bytes": 101697,
-      "sha256": "8b4dbb54d9db1d0be62b92215d943ffca81b05f0f63c1086ea4cecb24d457991",
+      "bytes": 92128,
+      "sha256": "26bc4e650470efbba4bdd523d67e90f386a9d8ff315032a0c8b2d61ef4dbbe9e",
       "width": 1100,
       "height": 960
     },
     {
       "path": "toy-phase.pdf",
-      "bytes": 59720,
-      "sha256": "ffc793b7f8c90fa8f16302a503e103d249061ce16503567d76f2b33cafba7be6"
+      "bytes": 42231,
+      "sha256": "421d83276f7d76e4bb7cfbf37c53acb12bbbc1ba64d5618267c056b14303225d"
     },
     {
       "path": "panda-cycle.png",
-      "bytes": 154817,
-      "sha256": "fb2b59d07cc87c33da3c44d2dcf21c58c046b19fd828eb70861d1a721c41a375",
+      "bytes": 144342,
+      "sha256": "8d7cde5699c1fa433d56c5e53a4e560256d71012ad7488d8437b76d9fd9e06c8",
       "width": 1280,
       "height": 880
     },
@@ -188,27 +189,27 @@
     },
     {
       "path": "activation-control.png",
-      "bytes": 66468,
-      "sha256": "596182ce4537bf61591bb561a283cf33da3c155a713481a7094747eaa2f031e3",
+      "bytes": 45335,
+      "sha256": "72ae296f01acc0286e0faa207aa85022aeabffa66c601a067c7a782c8b0d96b9",
       "width": 1100,
       "height": 880
     },
     {
       "path": "activation-control.pdf",
-      "bytes": 19636,
-      "sha256": "a3eecd6fad847b309b8a8abc5feaa84b1b1af0ed57fa026306b1befedfe9837f"
+      "bytes": 17271,
+      "sha256": "9c11462f867794eb7200e5fa561f958451e9c3ce716160dc79835c9c8b9a1685"
     },
     {
       "path": "waveform-control.png",
-      "bytes": 68823,
-      "sha256": "655edebc37dc4567f9ba19f1815da07b42d7fa731518f2646dddc6dc2b87262d",
+      "bytes": 47422,
+      "sha256": "7f63fc66064ed07ddacaf26814d399074c4a5b48f6dec2d8e939694df2802a5b",
       "width": 1100,
       "height": 880
     },
     {
       "path": "waveform-control.pdf",
-      "bytes": 43175,
-      "sha256": "2e5aa8e586cf828a44dd347dc04cf68f458d3322d9c0aafd84f545037f7b1bb3"
+      "bytes": 40812,
+      "sha256": "ae1353c83cf2794888a327e410f4ee995cbccc3c3d6ba107471718aa9c8379c3"
     },
     {
       "path": "figure-data.json",
@@ -222,13 +223,13 @@
     },
     {
       "path": "generate_figures.py",
-      "bytes": 8860,
-      "sha256": "acb3801120d264c05aaf8fdc784c685bab4501a734709c1a41f1d78725699cf0"
+      "bytes": 8635,
+      "sha256": "82bc7279b7147e1175aaeee7540e2d1a896a19e582447bf43d2246f1b9878fe3"
     },
     {
       "path": "README.md",
-      "bytes": 2886,
-      "sha256": "3378ac335cc0e8b7558d3184af663d27840ec46878e1e496014b4a05bf7cca79"
+      "bytes": 3049,
+      "sha256": "3d45970b841bc5609059dd055cf58dbaf58749be2146c4193266cc107c29aca0"
     }
   ],
   "narrative_facts": {
@@ -287,5 +288,14 @@
       "verified_bifurcation": false,
       "interpretation": "No sustained candidate or verified Hopf/Neimark-Sacker bifurcation was found in this finite search of the chosen one-sample feedback wrapper. The internal diverged label means a magnitude-limit/invalid stop, not proven asymptotic divergence. Solver failure does not prove nonexistence."
     }
+  },
+  "render_revision": {
+    "date": "2026-11-10",
+    "change": "Shortened the toy title and removed narrative annotations from the control panels.",
+    "figure_data_and_medians_unchanged": true,
+    "all_artist_data_and_axes_unchanged": true,
+    "artist_data_sha256": "e91ac7d106cbb39c58537d06196964af2ade619b90857c5d662808058740ac45",
+    "all_eight_exports_byte_identical_on_repeat": true,
+    "panda_cycle_pixels_unchanged": true
   }
 }

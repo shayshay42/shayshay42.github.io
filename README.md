@@ -16,7 +16,7 @@ Open http://localhost:4173. The Lorenz article is at http://localhost:4173/notes
 
 The PANDA exploration is at http://localhost:4173/notes/steering-a-forecasting-model.html. It follows activation steering, a search for an oscillatory bifurcation, and an SMWM-inspired model of activation dynamics. Its three figures distinguish a separate toy system, an actual PANDA noise-to-cycle forecast edit, and measured control results.
 
-Keep the agreed design: white paper, one font at two text sizes, minimal sections, the Carl Angel-5 model, and red/blue/black/green enamel choices. The Lorenz note now uses the provenance-matched extended figure with integral-matching Lorenz, Panda, and Chronos-T5, and records the later weak-loss Panda-to-SINDy experiment. The notebook contains the three full research entries; the sample posts and their dialog have been removed.
+Keep the agreed design: white paper, one font at two text sizes, minimal sections, the Carl Angel-5 model, and red/blue/black/green enamel choices. The Lorenz note uses the provenance-matched extended survival figure. Each note pairs its main figures with short explanations. The sample posts and their dialog have been removed.
 
 For an existing checkout on another machine, update its remote once:
 
@@ -54,9 +54,9 @@ Visit http://localhost:4173. No build or npm install is required. Typography use
 - `assets/projects/`: rendered logo previews for loading, no-JavaScript, and no-WebGL views.
 - `theme.js`: shared enamel theme and matching sweater colors, with the choice persisted across the site.
 - `notes/weighted-weak-lorenz.html`: research entry with verified Lorenz63 methods and core SINDy results.
-- `notes/steering-a-forecasting-model.html`: short exploratory PANDA research note, with three figures and an open-ended conclusion.
+- `notes/steering-a-forecasting-model.html`: short PANDA note on activation steering and control, with four panels in three figures.
 - `assets/panda-steering/`: compact saved figure data, source provenance, four PNG/PDF panels, and a figure-regeneration script.
-- `notes/oil-and-learned-optimization.html`: OIL, optimizer-field distillation, conditional flow matching, learned-region continuation, and completed RL preflights, with proposed extensions labeled separately.
+- `notes/oil-and-learned-optimization.html`: short note on learned initialization and optimizer flows, with a conceptual landscape.
 - `assets/oil/`: original generated landscape, article-local styling, table CSV, evidence notes, and source/prompt provenance. The image illustrates the idea; it is not a measured loss surface.
 - `assets/vendor/katex-0.18.9/`: pinned local math renderer, fonts, and MIT license. All three blogs use LaTeX `\(...\)` and `\[...\]` delimiters, rendered by the shared `math.js`; no CDN or installation is required.
 - `assets/lorenz/results.csv`: exact VPT estimates and 95% intervals extracted from the accepted v2 bootstrap summary.
@@ -73,7 +73,9 @@ Visit http://localhost:4173. No build or npm install is required. Typography use
 
 The Lorenz, PANDA, and OIL entries are research drafts grounded in saved experimental results and local evidence. The enamel controls switch between red, blue, black, and green and save the choice in the browser. Each research entry has a standalone HTML page. Article text works without JavaScript; equations remain readable LaTeX source until the local renderer runs. Shared math styles keep display equations horizontally scrollable on narrow screens and KaTeX provides accessible MathML.
 
-The article uses the extended three-panel survival plot copied unchanged from `artifacts/v2/tsfm_integral_survival/forecast_survival__all_tracks__noisy_levels.png`; a matching PDF is included. Its PNG and PDF SHA256 hashes were verified against the source result manifest. The title-free plot uses one boxed legend, partitioned into four information-track columns and containing all 16 methods. The post explicitly separates state-only dynamics learning, known-form parameter estimation, exact-physics surrogates, externally pretrained forecasting, and the later amortized Panda-to-SINDy experiment.
+The Lorenz article uses the extended three-panel survival plot copied unchanged from `artifacts/v2/tsfm_integral_survival/forecast_survival__all_tracks__noisy_levels.png`; a matching PDF is included. Its PNG and PDF SHA256 hashes were verified against the source result manifest. The title-free plot uses one boxed legend, partitioned into four information-track columns and containing all 16 methods.
+
+The November 10, 2026 prose revision preserves the author's saved titles and opening edits, including hidden HTML comments. Each note targets 250–400 words with at most two section headings. Supporting data and figure scripts remain in the repository, but the notes omit auxiliary download lists. The original documents and figures were saved outside the website in a dated `private-note-originals` snapshot, with a checksum manifest and restoration instructions. Future prose edits belong directly in the note HTML files.
 
 Paths in `provenance.json` identify files in the original research workspace; they are provenance references, not website dependencies.
 

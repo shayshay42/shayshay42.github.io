@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="From optimizer-in-the-loop training to gradient flow matching, learned proposals, and reinforcement learning: a research notebook on learning to solve dynamical inverse problems.">
-  <title>OIL, learned flows, and the search for better optimizers — Shayan Hajhashemi</title>
+  <meta name="description" content="A short note on learning useful starting points for inverse problems and learning flows from numerical optimization.">
+  <title>OIL tuning and learning meta flows for zero-shotoptimization — Shayan Hajhashemi</title>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../assets/vendor/katex-0.18.9/katex.min.css">
@@ -34,175 +34,42 @@
       <article class="blog-post oil-post">
         <header class="post-header">
           <p class="muted">Research note · Draft · September 29, 2026</p>
-          <h1>OIL, learned flows, and the search for better optimizers</h1>
+          <h1>OIL tuning and learning meta flows for zero-shotoptimization</h1>
         </header>
-        <p>If I have already solved thousands of inverse problems, what should the next solver remember? It could remember where good solutions tend to be. It could remember the directions taken by previous optimizers. Or it could learn when to keep refining a solution and when to search somewhere else.</p>
-        <p>Those possibilities led us from <strong>optimizer-in-the-loop training (OIL)</strong> to a broader project we called <strong>OIL-matching</strong>: learning from optimization trajectories, connecting that learning to flow matching, and eventually asking how to improve the decisions around a local optimizer. The experiments changed the emphasis. Learned starting points have been useful; replacing repeated exact optimization with a learned field has been much harder.</p>
-        <p>We developed our optimizer-field derivations before encountering the related gradient-flow-matching literature. Discovering afterward that a closely related idea was already being explored for neural-network optimization was a surprise—and gave us a new connection through which to understand our own experiments.</p>
+        <p>If I have already solved thousands of inverse problems, what should the next solver remember? It could learn a useful starting point. It could also learn how to move between guesses.</p>
+        <p>Those possibilities led us from <strong>optimizer-in-the-loop training (OIL)</strong> to a broader project we called <strong>OIL-matching</strong>: learning from optimization trajectories, connecting that learning to flow matching, and eventually asking how to improve the decisions around a local optimizer. </p><!-- The experiments changed the emphasis. Learned starting points have been useful; replacing repeated exact optimization with a learned field has been much harder.-->
+        <p>We developed our optimizer-field derivations before encountering the related gradient-flow-matching literature. Discovering afterward that a closely related idea was already being explored for neural-network optimization was a surprise!!!</p>
 
         <figure class="oil-hero">
-          <a href="../assets/oil/optimizer-landscape.png" target="_blank" rel="noopener" aria-label="Open the conceptual optimizer landscape at full size"><img src="../assets/oil/optimizer-landscape.png" width="1536" height="1024" fetchpriority="high" alt="An illustrative gray loss landscape. Black arrows follow a winding sequence of local optimizer steps; blue arrows propose longer moves from several intermediate points."></a>
-          <figcaption>Black follows local optimization; blue imagines learned proposals informed by experience across problems. The two horizontal directions represent parameter coordinates and height represents loss. This original AI-generated illustration is conceptual: the arrows are neither measured gradients nor evidence of a globally optimal shortcut.</figcaption>
+          <a href="../assets/oil/optimizer-landscape.png" target="_blank" rel="noopener" aria-label="Open the optimizer landscape at full size"><img src="../assets/oil/optimizer-landscape.png" width="1536" height="1024" fetchpriority="high" alt="Black arrows follow local optimizer steps across a loss landscape. Blue arrows show imagined learned proposals."></a>
+          <figcaption>Conceptual sketch. Black arrows follow local optimization. Blue arrows suggest learned moves across the loss landscape.</figcaption>
         </figure>
 
-        <nav class="oil-contents" aria-label="In this note">
-          <a href="#oil">Learning the start</a><span aria-hidden="true"> · </span><a href="#matching">Learning the flow</a><span aria-hidden="true"> · </span><a href="#results">What happened</a><span aria-hidden="true"> · </span><a href="#global">Searching across regions</a><span aria-hidden="true"> · </span><a href="#rl">The RL question</a>
-        </nav>
-
-        <section aria-labelledby="problem">
-          <h2 id="problem">Why a good parameter prediction can make a bad simulation</h2>
-          <p>Suppose we observe a trajectory \(y\) and know the differential equation, but not its parameters \(\theta\). A simulator \(\Phi\) turns a parameter guess into a trajectory. Trajectory matching, or TM, adjusts the guess to reduce the discrepancy with the observation. Writing \(m\) for the number of observed scalar values:</p>
-          <div class="math-display" tabindex="0" role="region" aria-label="Trajectory-matching objective">
-            \[L(\theta;y)=\frac{1}{m}\left\lVert\Phi(\theta)-y\right\rVert_2^2.\]
-          </div>
-          <p>Our main example was the generalized Lotka–Volterra system, a model of interacting populations. With six species it has 42 parameters: six growth rates and 36 interactions. Each clean trajectory was observed at 101 times. A message-passing neural network, or MPNN, could quickly map those observations to parameters; bounded L-BFGS-B could refine a guess using numerical simulation and gradients.</p>
-          <p>The difficulty is that parameter distance and trajectory distance measure different things. Some combinations of parameters barely change the observed behavior. Other combinations change it dramatically. This is the geometry of <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2000971/">sloppy parameter sensitivities</a>: a prediction can look close in parameter RMSE yet move in a sensitive direction and produce an inaccurate or invalid simulation. Conversely, several parameter vectors can fit the same observations well.</p>
-          <p>This suggests teaching the predictor about what happens after its output enters the simulator and optimizer. Synthetic training data provide generating-parameter labels, but the deployed optimizer sees observations, bounds, and the objective. The generating parameters are an evaluation reference; they are not an available test-time destination.</p>
-        </section>
+        <p>An inverse problem asks which parameters could produce the observations. A close parameter estimate can still give a poor simulated trajectory.</p>
 
         <section aria-labelledby="oil">
-          <h2 id="oil">OIL: learning an initialization that can be refined</h2>
-          <p>OIL trains a network to produce a useful starting point for finite optimization. In the current implementation, the network predicts \(\theta^{(0)}=g_\psi(y)\), then training applies exactly five differentiable trajectory-matching updates. The loss supervises the initial parameters, the refined parameters, and the refined simulation:</p>
-          <div class="math-display" tabindex="0" role="region" aria-label="OIL training updates and loss">
-            \[\begin{aligned}
-              \theta^{(0)} &amp;= g_\psi(y), \\
-              \theta^{(5)} &amp;= U_{\mathrm{train}}^5\!\left(\theta^{(0)};y\right), \\[0.8em]
-              \mathcal{L}_{\mathrm{OIL}} &amp;= \mathcal{L}_{\theta}\!\left(\theta^{(0)},\theta^\star\right) \\
-              &amp;\quad+\mathcal{L}_{\theta}\!\left(\theta^{(5)},\theta^\star\right) \\
-              &amp;\quad+\mathcal{L}_{\mathrm{traj}}\!\left(\Phi(\theta^{(5)}),y\right).
-            \end{aligned}\]
+          <h2 id="oil">Learning a start</h2>
+          <p>OIL trains a network to predict a starting point for a numerical solver. During training, the prediction passes through five differentiable optimization steps:</p>
+          <div class="math-display" tabindex="0" role="region" aria-label="OIL initialization and training refinement">
+            \[\theta^{(0)}=g_\psi(y),\qquad
+              \theta^{(5)}=U_{\mathrm{train}}^5\!\left(\theta^{(0)};y\right).\]
           </div>
-          <p>Backpropagation passes through those five updates and the simulator to the initializer. The initial parameter term preserves a useful prediction; refined parameter supervision limits drift along weakly constrained directions; the trajectory term rewards a refined solution that reproduces the observation. The implemented losses have equal outer weights after scaling: block-standardized parameter losses and a scaled asinh–Huber trajectory loss. They are not three unscaled MSEs.</p>
-          <p>At inference, the predictor makes one estimate and a separate, budgeted L-BFGS-B solve refines it. The five training updates are absent. Training uses safeguarded updates in prior-logit coordinates; the inference optimizer uses bounded native parameters. OIL therefore learns compatibility with refinement without assuming that the inner training procedure has converged.</p>
-          <p>This sits beside <a href="https://proceedings.mlr.press/v80/kim18e.html">semi-amortized inference</a>, <a href="https://jmlr.org/papers/v25/23-1174.html">learning to warm-start optimization</a>, and <a href="https://arxiv.org/abs/1703.00443">differentiable optimization layers</a>. The shared idea is to train a predictor with the downstream computation in view. Ordinary trajectory fine-tuning (FT) is a useful control: it supervises the predictor's output without differentiating through the optimizer unroll.</p>
-          <p>The extra unroll is a hypothesis about useful training, not an automatic advantage. In our later authenticated 100,000-system S6 comparison, raw MPNN, matched FT, and true OIL had simulation validity of 91.929%, 99.089%, and 99.061%, respectively. Their pooled native parameter RMSEs were 0.060463, 0.061159, and 0.065164. Both tuning procedures improved validity, while OIL carried the larger parameter cost. Across the available controls, matched FT was often the stronger initializer.</p>
-          <p>There is also a historical correction behind that wording: an earlier result labeled “OIL” was subsequently identified as trajectory-fine-tuned MPNN plus TM. I use the corrected method identities here. The evidence supports learned initialization plus exact refinement more broadly than it supports a unique advantage of OIL training.</p>
-        </section>
-
-        <section aria-labelledby="matching">
-          <h2 id="matching">OIL-matching: can we learn what the optimizer does?</h2>
-          <p>OIL-matching is our name for the investigation that followed, rather than one published algorithm with a single objective. If an optimizer repeatedly solves related inverse problems, its intermediate states become training data. We recorded screened initial guesses, accepted L-BFGS-B iterates, losses, exact gradients, and evaluation counts. The S6 training portion alone contained 280,000 paths and about 5.88 million stored states.</p>
-          <p>The first student took an observed trajectory, a current parameter guess, and a step index, then predicted a transformed loss gradient. Robust signed transformations helped with the enormous range of gradient magnitudes. At inference we decoded the prediction, took a projected step, and repeated. This is supervised gradient distillation: solver labels are targets, and training does not backpropagate through the recorded optimizer.</p>
-          <p>Three quantities that look like arrows in the illustration are different:</p>
-          <ul>
-            <li><strong>A loss gradient</strong> describes local sensitivity at the current parameter.</li>
-            <li><strong>An optimizer update</strong> also reflects its controller. L-BFGS-B uses curvature history, line search, and active bounds.</li>
-            <li><strong>A transport velocity</strong> moves a state along a chosen source-to-target path, which can differ substantially from loss descent.</li>
-          </ul>
-          <p>Learning the first quantity does not reconstruct the second. Even an exact gradient plugged into a simple fixed-step rule need not follow L-BFGS-B. That distinction eventually led us to test endpoint transport and a genuinely memoryless teacher separately.</p>
+          <p>Here \(y\) is the observed trajectory. The training loss reaches the network through those steps. At inference, a separate L-BFGS-B solve refines its prediction.</p>
         </section>
 
         <section aria-labelledby="flow">
-          <h2 id="flow">The connection to conditional flow matching</h2>
-          <p>In the endpoint experiment, we paired an initializer \(u_0\) with a target \(u_1\) in normalized parameter coordinates. The target was either a long-run TM endpoint or the generating parameters. We sampled positions on the straight connecting path and trained a velocity model:</p>
-          <div class="math-display" tabindex="0" role="region" aria-label="Linear interpolation and flow-matching loss">
+          <h2 id="flow">Learning the flow</h2>
+          <p>The solver's intermediate states offer another source of training data. I explored whether a neural field could learn useful moves between parameter guesses.</p>
+          <p>In <a href="https://arxiv.org/abs/2210.02747">flow matching</a>, a learned velocity moves an initial guess \(u_0\) towards a target \(u_1\). The target can be a parameter estimate from a long solver run.</p>
+          <div class="math-display" tabindex="0" role="region" aria-label="Interpolation and flow-matching loss">
             \[\begin{gathered}
               u_t=(1-t)u_0+tu_1,\qquad t\sim\mathcal{U}(0,1), \\[0.8em]
               \mathcal{L}_{\mathrm{flow}}=
               \mathbb{E}\!\left[\left\lVert v_\psi(u_t,t,y,u_0)-(u_1-u_0)\right\rVert_2^2\right].
             \end{gathered}\]
           </div>
-          <p>This is the direct connection to <a href="https://arxiv.org/abs/2210.02747">Flow Matching</a> and <a href="https://arxiv.org/abs/2209.03003">Rectified Flow</a>. At inference we start at \(u_0\) and integrate the learned field to terminal transport time. The flow can learn a route toward an endpoint without reproducing the winding optimizer path. Our endpoint model also used a terminal-consistency loss; prefix variants could condition on a few observed optimizer updates.</p>
-          <p>Only after developing our own derivations did we encounter <a href="https://arxiv.org/abs/2505.20221">Gradient Flow Matching for Learning Update Dynamics in Neural Network Training</a>. It was a surprising parallel: related ideas were already being used to forecast neural-network weight evolution from observed-prefix changes and endpoint information. Our setting instead infers mechanistic parameters from observed trajectories. We cite this work as a connection we discovered later, not as the starting point for our original derivation; its results in neural-network optimization do not guarantee the same outcome for our inverse problems.</p>
-          <p>The marginalization story needs care. Under squared regression, the ideal prediction is the conditional mean \(\mathbb{E}[V\mid X]\), where \(V\) is the target velocity and \(X\) collects the supplied inputs. With complete observations and current parameters, the exact trajectory-loss gradient is deterministic. Four initializers do not by themselves make its labels contradictory. Harmful averaging can arise when the encoder aliases distinct problems, relevant history is missing, or deployment visits states poorly covered by training.</p>
-          <p>Nor does the continuity equation supply an optimization energy. It describes conservation of probability mass. Exact gradient flow, \(\dot{\theta}=-\nabla_\theta L\), decreases a static loss:</p>
-          <div class="math-display" tabindex="0" role="region" aria-label="Loss decreases along exact gradient flow">
-            \[\frac{\mathrm{d}L}{\mathrm{d}t}
-              =\left(\nabla_\theta L\right)^{\mathsf T}\dot{\theta}
-              =-\left\lVert\nabla_\theta L\right\rVert_2^2\leq 0.\]
-          </div>
-          <p>A generic learned transport field has no such guarantee. Our projected-field visualizations showed heterogeneous directions, but they did not establish that lost high-frequency information, curl, or mode collapse caused the performance gap.</p>
-        </section>
-
-        <section aria-labelledby="simplify">
-          <h2 id="simplify">Giving the learned field a simpler job</h2>
-          <p>We tried to remove the obvious difficulties. The autonomous experiment used one fixed initializer, omitted time and step inputs, and learned bounded actions from a memoryless exact-gradient teacher. The teacher masked outward boundary motion, capped step length, and checked destination validity. Its final corpus contained 5,000 systems and 100,000 validated transitions. Each complete 20-step teacher path cost 21 exact value-and-gradient evaluations.</p>
-          <p>The student received only the trajectory and current parameters. A matched neural control used the same capacity to predict the teacher's terminal point in one call. This was a deliberately small test of whether local action learning added anything beyond endpoint supervision.</p>
-          <p>Choosing the closest initializer during training was another proposed simplification. In the available four-start bank, start0 was already closest to its own long-run TM endpoint in 98.8% of cases. We therefore ran the deployable fixed-start simplification. We did not train a closest-of-four router, and target-aware selection remains unavailable at inference.</p>
-          <p>Two recent papers helped refine these questions. <a href="https://arxiv.org/abs/2607.27372">Explorative Modeling</a> chooses the best current model generation among several candidates during training; it is more than geometric nearest-initializer selection. <a href="https://arxiv.org/html/2608.01692v3">Beckmann Transport Models</a> studies autonomous transport under explicit assumptions, with trajectory-dependent arrival times. Our bounded discrete-action experiment explored time independence, but did not implement its transport construction or inherit its convergence claims.</p>
-        </section>
-
-        <section aria-labelledby="results">
-          <h2 id="results">Useful local directions, fragile repeated inference</h2>
-          <p>The original learned-gradient rollout improved parameter recovery but retained only 67.275% valid trajectory replays after 20 steps. Endpoint supervision repaired much of that problem. On matched targets, one-call direct predictors generally had better median recovery than 20-call endpoint flows, although flows sometimes had better means or validity. No single scalar told the whole story.</p>
-          <p>The autonomous test made the remaining difficulty especially clear. Its first predicted action had mean cosine similarity 0.988 with the exact teacher. Yet its repeated rollout produced a much larger trajectory-error tail:</p>
-          <section class="results-table" aria-label="Autonomous action results, scroll horizontally on narrow screens" tabindex="0">
-            <table>
-              <caption>Clean S6 selection IDs 25,001–26,000; one fixed start per system. Trajectory MSE uses valid replays only.</caption>
-              <thead><tr><th scope="col">Method</th><th scope="col">Mean MSE</th><th scope="col">Median MSE</th><th scope="col">Validity</th><th scope="col">Inference calls</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Learned autonomous actions</th><td>48,292.40</td><td>165.409</td><td>98.9%</td><td>20 neural</td></tr>
-                <tr><th scope="row">Exact trust teacher</th><td>5,346.30</td><td>153.498</td><td>100%</td><td>21 exact</td></tr>
-                <tr><th scope="row">Direct endpoint predictor</th><td>5,542.80</td><td>165.297</td><td>100%</td><td>1 neural</td></tr>
-              </tbody>
-            </table>
-          </section>
-          <p>The learned field's median nearly matched direct prediction, but its mean was 8.71 times larger, even after excluding invalid replays. Its parameter advantage was tiny: mean native per-system RMSE 0.121604 versus 0.121638. These are one-seed selection results; the historical gate stopped the run before final testing. We report means, medians, and validity separately here rather than assigning a numerical failure penalty.</p>
-          <p>A plausible explanation is rollout exposure: a small error moves the student away from the teacher's states, and its next prediction is made at a less familiar input. <a href="https://proceedings.mlr.press/v15/ross11a.html">DAgger</a> addresses this problem by collecting expert labels where the learner actually goes. Our on-policy and stability studies did not produce a winning optimizer, but the idea remains a concrete way to investigate this mechanism. First-state alignment alone cannot establish accuracy near the optimum.</p>
-          <p>It would be too broad to conclude that neural optimizers can never help. These experiments establish a narrower finding: the fields we trained did not provide a robust advantage over a matched direct predictor and exact refinement. They learned signal about the problem without learning a better complete optimization procedure.</p>
-        </section>
-
-        <section aria-labelledby="global">
-          <h2 id="global">Globalizing the local optimizer</h2>
-          <p>The next question was whether the learned model should decide <em>where</em> the optimizer works. A local solver can be excellent once it enters a favorable region and still depend strongly on its starting point. We can give it a learned proposal, several genuinely different candidates, or an easier objective whose solution is gradually continued to the original problem.</p>
-          <p>This connects to <a href="https://doye.chem.ox.ac.uk/abstracts/jpc97.html">basin-hopping</a>, which builds search around locally minimized proposals, and to <a href="https://proceedings.mlr.press/v202/lin23n.html">learned continuation paths</a>. “Globalizing” here means extending the search across regions or objectives. It does not certify arrival at the global minimum.</p>
-          <p>We tested a particularly tempting idea: use intermediate points of a learned flow as a portfolio of starts. With 32 exact calls available, four candidates each received eight calls. The same budget could instead be spent on one learned endpoint:</p>
-          <section class="results-table" aria-label="Learned-region continuation results, scroll horizontally on narrow screens" tabindex="0">
-            <table>
-              <caption>48 previously exposed S6 engineering systems. Total exact allocation: 32 calls per system. Every listed endpoint replay was valid.</caption>
-              <thead><tr><th scope="col">Starting strategy</th><th scope="col">Mean MSE</th><th scope="col">Median MSE</th><th scope="col">Validity</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Canonical start + 32-call tail</th><td>701.289</td><td>1.3036</td><td>100%</td></tr>
-                <tr><th scope="row">Flow endpoint + 32-call tail</th><td>115.618</td><td>0.2287</td><td>100%</td></tr>
-                <tr><th scope="row">Direct endpoint + 32-call tail</th><td>13.904</td><td>0.0572</td><td>100%</td></tr>
-                <tr><th scope="row">Four flow waypoints × 8 calls</th><td>5,030.961</td><td>123.6577</td><td>100%</td></tr>
-              </tbody>
-            </table>
-          </section>
-          <p>The learned endpoints located useful regions. The four waypoints were too correlated to justify shortening every local solve: the full flow endpoint won on 42 of 48 systems, and a straight-chord portfolio gave almost the same result. This was an engineering study on an exposed cohort, but it provided a practical lesson about where the useful learned information was concentrated.</p>
-          <p>We also tried a more diverse proposal source in sparse, noisy gLV: eight neural-posterior samples versus eight deterministic space-filling starts, each with the same local-refinement cap. On 128 validation systems, posterior proposals lowered aggregate trajectory NMSE by 2.26% but took 21.7% longer; per-system wins were near chance and median gains negligible. Diversity alone did not establish a useful advantage.</p>
-          <p>The accounting matters throughout. Neural calls, accepted iterations, joint value-and-gradient calls, and scoring replays are different costs. A learned proposal that purchases two exact evaluations before a 20-call tail must compete with an optimizer allowed all 22 calls. Our recurrent-controller study lost that comparison, even though the proposal usually descended.</p>
-        </section>
-
-        <section aria-labelledby="rl">
-          <h2 id="rl">What reinforcement learning could change</h2>
-          <p>Gradient imitation asks whether an action resembles an expert's local direction. Reinforcement learning can ask whether the action leaves a better solution after the remaining computation. That change in target is attractive when an initially awkward move creates a better starting region, or when a solver should restart instead of polishing the current point.</p>
-          <p><a href="https://arxiv.org/abs/1606.04474">Learning to learn by gradient descent by gradient descent</a> trains recurrent update rules by backpropagating optimization losses through an unrolled computation. <a href="https://arxiv.org/abs/1606.01885">Learning to Optimize</a> formulates optimization as a policy-learning problem. For this project, a useful next formulation would make a short local solve a temporally extended action, in the spirit of <a href="https://www.sciencedirect.com/science/article/pii/S0004370299000521">options in reinforcement learning</a>:</p>
-          <div class="math-display" tabindex="0" role="region" aria-label="Policy action and budgeted local refinement">
-            \[\begin{aligned}
-              a_k &amp;\sim\pi_\psi(\,\cdot\mid s_k), \\
-              \widetilde{\theta}_k &amp;=\operatorname{Proposal}_{a_k}(\theta_k), \\
-              \theta_{k+1} &amp;=\operatorname{LocalSolve}_{B(a_k)}(\widetilde{\theta}_k;y).
-            \end{aligned}\]
-          </div>
-          <p>The state would include observations, current parameters, evaluated loss and gradient, solver history, and remaining budget. Actions could continue the current solve, select a restart, change damping, choose a continuation stage, or stop. A candidate reward is improvement in the best valid observed objective, less a compute charge, with invalid proposals explicitly handled. Truth parameters and clean latent trajectories would be reserved for evaluation.</p>
-          <p>Before training such a policy, we asked whether there were useful choices to learn. On 400 clean Lorenz systems, four starts received the same eight-call TM budget. A cross-fitted value model chose integral matching plus TM for every system, exactly reproducing the best fixed policy. A hindsight oracle had apparent headroom, but one system contributed 99.70% of its positive mean saving. The deployable model recovered none of that gap.</p>
-          <p>A later sparse/noisy gLV screen also found little meaningful start-selection headroom under its strongest local solver: 4.7% of pilot systems at an eight-call budget and none at 32 calls, with no validated observation-only ranking model. These were completed preflights; we did not obtain a successful sequential RL optimizer or train a DQN on those results.</p>
-          <p>That suggests a concrete order for future work: first demonstrate broad gains for a same-budget oracle portfolio, then show that available observations or solver telemetry predict the useful decisions. A contextual bandit is enough for a single restart choice. Sequential RL becomes justified when later feedback changes what the next action should be.</p>
-        </section>
-
-        <section aria-labelledby="further">
-          <h2 id="further">Learning a smaller part of the inverse problem</h2>
-          <p>The investigation also moved toward physics-structured inference. Integral and weak matching use identities from the differential equation to turn observations into an approximate inverse problem. This avoids asking a network to rediscover every relation between the trajectory and parameters. A learned component can then predict regularization, a residual correction, or a proposal distribution, followed by a common exact refinement.</p>
-          <p>The September structured-adaptive-regularization direction makes this explicit: learn how strongly to shrink uncertain parameter directions in a weak inverse solve. It follows naturally from the same distinction that motivated OIL—some directions are constrained by observations, while others depend heavily on prior information. Its follow-up manuscript is still a planning draft; individual benchmarks and posterior experiments have separate results, and there is no universal winner across observation regimes.</p>
-          <p>There are other useful extensions. A bounded adjoint-control pilot asked for actions informed by a terminal objective and still lost to a short Lorenz L-BFGS-B solve. It was a narrow deterministic adaptation, not a general test of <a href="https://arxiv.org/abs/2409.08861">Adjoint Matching</a>, which formulates stochastic optimal control as regression for reward fine-tuning generative models. Partial observations raise an additional problem of inferring hidden states. Posterior inference asks for calibrated uncertainty rather than merely a bank of low-loss points. Each changes what a successful learned component must do.</p>
-          <p>What I take forward is a division of work. Learning can summarize the population of problems and suggest plausible regions or regularization. The numerical solver can use fresh, instance-specific feedback to refine the current estimate. The next blue arrow should be judged by the valid solution it enables under the remaining budget—not just by how closely it resembles the first black arrow.</p>
-        </section>
-
-        <section aria-labelledby="evidence">
-          <h2 id="evidence">Evidence and reading</h2>
-          <p>This is a research notebook, based on local experiments through September 29, 2026. The GFM pilots are predominantly clean S6 and seed 42; the tables above use different, explicitly labeled cohorts. They do not establish multiseed generality, wall-clock equivalence, or a theorem against learned optimization. Mean and median trajectory errors always refer to valid replays in this post; validity is reported separately.</p>
-          <p><a href="../assets/oil/evidence.md">Evidence notes and source map</a> · <a href="../assets/oil/results.csv" download>Table data (CSV)</a> · <a href="../assets/oil/provenance.json">Source hashes and illustration provenance</a>. These downloads are included with the site. The earlier <a href="weighted-weak-lorenz.html">note on weak forms and Lorenz</a> develops the connection to integrated equations.</p>
-          <ul class="oil-reading">
-            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2000971/">Gutenkunst et al. (2007), Universally Sloppy Parameter Sensitivities in Systems Biology Models.</a> The distinction between parameter uncertainty and predictive sensitivity.</li>
-            <li><a href="https://proceedings.mlr.press/v80/kim18e.html">Kim et al. (2018), Semi-Amortized Variational Autoencoders</a>; <a href="https://jmlr.org/papers/v25/23-1174.html">Sambharya et al. (2024), Learning to Warm-Start Fixed-Point Optimization Algorithms</a>; <a href="https://arxiv.org/abs/1703.00443">Amos &amp; Kolter (2017), OptNet.</a> Learned initialization and differentiable refinement.</li>
-            <li><a href="https://arxiv.org/abs/2210.02747">Lipman et al., Flow Matching</a>; <a href="https://arxiv.org/abs/2209.03003">Liu, Gong &amp; Liu, Rectified Flow</a>; <a href="https://arxiv.org/abs/2505.20221">Shou, Ding &amp; Gao (2025), Gradient Flow Matching.</a> Probability transport and learned update dynamics.</li>
-            <li><a href="https://arxiv.org/abs/2607.27372">Gladstone, Ji &amp; Du (2026), Explorative Modeling</a>; <a href="https://arxiv.org/html/2608.01692v3">Lee et al. (2026), Beckmann Transport Models, v3.</a> Training-time candidate coupling and autonomous transport.</li>
-            <li><a href="https://proceedings.mlr.press/v15/ross11a.html">Ross, Gordon &amp; Bagnell (2011), DAgger.</a> Learning under the state distribution induced by the learner.</li>
-            <li><a href="https://arxiv.org/abs/2409.08861">Domingo-Enrich et al. (2025), Adjoint Matching.</a> Reward fine-tuning through memoryless stochastic optimal control.</li>
-            <li><a href="https://doye.chem.ox.ac.uk/abstracts/jpc97.html">Wales &amp; Doye (1997), Basin-Hopping</a>; <a href="https://proceedings.mlr.press/v202/lin23n.html">Lin et al. (2023), Continuation Path Learning.</a> Search built around local solvers and easier-to-harder problems.</li>
-            <li><a href="https://arxiv.org/abs/1606.04474">Andrychowicz et al. (2016), Learning to learn by gradient descent by gradient descent</a>; <a href="https://arxiv.org/abs/1606.01885">Li &amp; Malik, Learning to Optimize</a>; <a href="https://www.sciencedirect.com/science/article/pii/S0004370299000521">Sutton, Precup &amp; Singh (1999), Options.</a> Learned update rules and decisions over extended solver actions.</li>
-          </ul>
+          <p>Integrating the learned field gives a new guess for refinement.</p>
+          <p>In the matched-target experiments, direct endpoint predictors used one neural call. The flows used 20 calls and generally gave worse median parameter recovery.</p>
         </section>
       </article>
     </main>
