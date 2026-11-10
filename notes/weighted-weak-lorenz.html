@@ -32,7 +32,7 @@
     <main id="main">
       <article class="blog-post">
         <header class="post-header"><p class="muted">Research note &middot; Draft &middot; Updated September 2026</p><h1>Weak formulation and Birkhoff weighting vs Timeseries Foundation models</h1></header>
-        <p>I took Lorenz63 as a benchamark to explore how different existing methods do at forcasting chaotic dynamics... I asked: Does the weak formualtion give us the robustness we need? Does weighted Birkhoff averaging from front page SIAM news help even more? And does any method do any better than SINDy with its tuned prior...?</p>
+        <p>I took Lorenz63 as a benchamark to explore how different existing methods do at forcasting chaotic dynamics... I asked: Does the weak formualtion give us the robustness we need? Does weighted Birkhoff averaging from <a href="https://www.siam.org/publications/siam-news/articles/faster-averages-better-models-weighted-birkhoff-methods-for-dynamical-systems/">front page SIAM news</a> help even more? And does any method do any better than SINDy with its tuned prior...?</p>
         <p>Empirically we saw that, weak-form SINDy gives up some clean-data efficiency but degrades much more slowly as training noise rises. Giving less weight to windows near the ends of a trajectory does not add a consistent benefit...</p>
         <!-- <p>Direct foundation-model forecasts are useful but belong to a different information track, and a weakly trained Panda-to-SINDy conditioner improves on unseen source systems but fails a reserved Lorenz gate.</p> -->
 
