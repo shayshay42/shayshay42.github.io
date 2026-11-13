@@ -51,7 +51,7 @@ test('Voice Laser Lab project and static app', async t => {
       assert.deepEqual(appRequests, [], 'The homepage must not preload the simulation or its model.');
       await page.keyboard.press('Enter');
       await page.waitForURL(app);
-      assert.equal(await page.getByRole('heading', {name: 'See what sound does.'}).count(), 1);
+      assert.equal(await page.getByRole('heading', {name: 'On listening', level: 1}).count(), 1);
       await page.close();
     });
 

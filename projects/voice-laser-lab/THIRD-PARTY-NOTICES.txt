@@ -6,6 +6,10 @@ The human display mesh is CC0. See models/human/README.md and CC0-1.0.txt.
 
 ---
 
+Sketch of Yasmine Hamdan by John Berger. Image source: Hummus for Thought, “Listening: The Aural Resonance of a Formless Line” (2018). See art/john-berger-source.json for source and attribution details.
+
+---
+
 react 19.2.6 (MIT)
 
 MIT License
