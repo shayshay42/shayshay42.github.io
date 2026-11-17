@@ -1,10 +1,10 @@
 // src/physics/engine.ts
 var DEFAULT_CONFIG = {
-  gain: 1,
-  tension: 1,
-  damping: 0.03,
-  asymmetry: 0.12,
-  wallDistance: 2
+  gain: 1.7,
+  tension: 0.85,
+  damping: 0.015,
+  asymmetry: 0.23,
+  wallDistance: 2.5
 };
 var MODEL_VERSION = "membrane-six-mode-v1";
 var TOY = {
