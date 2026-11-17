@@ -498,7 +498,7 @@ function createStereogramRunner() {
   const group = new THREE.Group();
   group.name = 'Stereogram Runner — Chromium pixel runner in front of a stereogram';
   const layers = new THREE.Group();
-  layers.rotation.y = -0.22;
+  layers.rotation.set(0.22, -0.22, 0);
   group.add(layers);
   const paper = enamel('#f5f2e9', 0.68, 0.03);
   const edge = enamel('#d5d4c9', 0.65, 0.06);
