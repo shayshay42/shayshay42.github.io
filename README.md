@@ -49,7 +49,7 @@ Visit http://localhost:4173. No build or npm install is required. Typography use
 - `assets/publications.bib`: full-author BibTeX citations for eleven papers/manuscripts and three presentations.
 - `assets/cv/`: downloadable English and French CVs, with editable LaTeX sources in `source/`.
 - `math.js`: shared LaTeX rendering for all `.blog-post` articles.
-- `project-models.js`: original 3D adaptations of the Read the Room and Rizome marks, the molecular glider, and the Voice Laser Lab apparatus.
+- `project-models.js`: 3D project logos, including the Voice Laser Lab trace board and small voice icons.
 - `project-viewer.js`: lazy, on-demand logo rendering and pointer/focus tilt.
 - `assets/projects/`: rendered logo previews for loading, no-JavaScript, and no-WebGL views.
 - `theme.js`: shared enamel theme and matching sweater colors, with the choice persisted across the site.
@@ -166,7 +166,7 @@ The shared navigation links to Notes, Projects, Publications ([scholar](https://
 
 The homepage Projects section lists [Voice Laser Lab](projects/voice-laser-lab/), [Stereogram Runner](projects/stereogram-runner/), [Molecular Game of Life](projects/molecular-game-of-life/), [Read the Room](https://readtheroom.site/), and [Rizome Biotech](https://www.rizomebiotech.ai/), in that order. Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
 
-The logos use real geometry: Read the Room's chameleon, Rizome's branching medallion, a molecular glider, and a membrane/mirror laser apparatus. Stereogram Runner places an extruded pixel dinosaur and cactus in front of a separate stereogram print. Its pixel masks come from Chromium's offline runner, with the BSD license and source record in `assets/projects/`. The rear image encodes the same dinosaur as a parallel-view stereogram. The external brand references are the sites' [chameleon mark](https://readtheroom.site/images/RTR-logo_Aug2025.png) and [Rizome mark](https://www.rizomebiotech.ai/favicon.png).
+The logos use real geometry: Read the Room's chameleon, Rizome's branching medallion, and a molecular glider. Voice Laser Lab has a cream board with a raised Lissajous trace and one direct laser beam. Small mouth, music-note, and megaphone icons sit beside it. Stereogram Runner places an extruded pixel dinosaur and cactus in front of a separate stereogram print. Its pixel masks come from Chromium's offline runner, with the BSD license and source record in `assets/projects/`. The rear image encodes the same dinosaur as a parallel-view stereogram. The external brand references are the sites' [chameleon mark](https://readtheroom.site/images/RTR-logo_Aug2025.png) and [Rizome mark](https://www.rizomebiotech.ai/favicon.png).
 
 Cards are ordinary links with decorative 3D views. The scenes initialize near the viewport, tilt with the pointer or keyboard focus, and remain still when idle or when reduced motion is requested. Touch gestures retain normal link and page scrolling behavior. Local PNGs preserve the appearance when JavaScript or WebGL is unavailable. The Stereogram Runner card also keeps its fallback visible until its texture loads, or if that load fails. Brand colors stay fixed when the notebook enamel changes. Re-render the previews if the geometry or lighting changes.
 
