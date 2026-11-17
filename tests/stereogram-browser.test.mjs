@@ -68,6 +68,48 @@ test('Stereogram Runner project and nested app', async t => {
       }
     });
 
+    await t.test('the PNG stays visible until the stereogram texture loads', async () => {
+      const page=await browser.newPage({reducedMotion:'reduce'});
+      let finish;
+      const delayed=new Promise(resolve=>{finish=resolve;});
+      await page.route('**/assets/projects/stereogram-texture.png',async route=>{
+        await delayed;
+        await route.continue();
+      });
+      const requestStarted=page.waitForRequest('**/assets/projects/stereogram-texture.png');
+      try {
+        await page.goto(base,{waitUntil:'domcontentloaded'});
+        const logo=page.locator(selector);
+        await logo.scrollIntoViewIfNeeded();
+        await logo.locator('canvas').waitFor({state:'attached'});
+        await requestStarted;
+        assert.equal(await logo.locator('img').isVisible(),true);
+        assert.equal(await logo.locator('canvas').isVisible(),false);
+        finish();
+        await page.waitForSelector(`${selector}.is-ready canvas`);
+        assert.equal(await logo.locator('img').isVisible(),false);
+        assert.equal(await logo.locator('canvas').isVisible(),true);
+      } finally {finish();await page.close();}
+    });
+
+    await t.test('a missing texture keeps the fallback and project link usable', async () => {
+      const page=await browser.newPage();
+      const errors=[];
+      page.on('pageerror',error=>errors.push(error.message));
+      await page.route('**/assets/projects/stereogram-texture.png',route=>route.abort('failed'));
+      await page.goto(base);
+      const logo=page.locator(selector);
+      await logo.scrollIntoViewIfNeeded();
+      await logo.locator('canvas').waitFor({state:'attached'});
+      assert.equal(await logo.locator('img').isVisible(),true);
+      assert.equal(await logo.locator('canvas').isVisible(),false);
+      await page.locator('.project-link').filter({has:logo}).click();
+      await page.waitForURL(app);
+      await page.waitForSelector('.playfield canvas[data-ready="true"]');
+      assert.deepEqual(errors,[]);
+      await page.close();
+    });
+
     await t.test('worker, controls, guide, mobile layout, and notebook return work at the nested URL', async () => {
       const page=await browser.newPage({viewport:{width:1280,height:900}});
       const requests=[], failures=[], errors=[],workers=[];

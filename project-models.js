@@ -1,7 +1,8 @@
 import * as THREE from './assets/vendor/three.module.js';
+import { CHROME_TREX, CHROME_CACTUS } from './assets/projects/chrome-runner-mask.js';
 
-// Original project logos built as solid enamel objects. Published brand marks
-// guide the chameleon and branches; the science projects depict their subjects.
+// Project logos built as solid objects. Published brand marks guide the
+// chameleon and branches; Chromium pixel masks retain their source attribution.
 export function createProjectLogo(kind) {
   if (kind === 'readtheroom') return createChameleon();
   if (kind === 'rizome') return createRizome();
@@ -495,136 +496,95 @@ function createVoiceLaserLab() {
 
 function createStereogramRunner() {
   const group = new THREE.Group();
-  group.name = 'Stereogram Runner — T-Rex rising from an enamel pin field';
-  const cream = enamel('#f0eadb', 0.39, 0.1);
-  const rim = enamel('#d4cbb7', 0.4, 0.13);
-  const silhouetteGreen = enamel('#365740', 0.36, 0.12);
-  const pinGreen = enamel('#4c7055', 0.32, 0.14);
-  const fieldMaterials = [
-    enamel('#dbd5c4', 0.39, 0.1),
-    enamel('#91a69a', 0.39, 0.1),
-    enamel('#b98e80', 0.39, 0.1),
-    enamel('#bcb18a', 0.39, 0.1),
-  ];
-  const roundedPanel = (width, height, radius) => {
-    const shape = new THREE.Shape(), x = width / 2, y = height / 2;
-    shape.moveTo(-x + radius, -y);
-    shape.lineTo(x - radius, -y); shape.quadraticCurveTo(x, -y, x, -y + radius);
-    shape.lineTo(x, y - radius); shape.quadraticCurveTo(x, y, x - radius, y);
-    shape.lineTo(-x + radius, y); shape.quadraticCurveTo(-x, y, -x, y - radius);
-    shape.lineTo(-x, -y + radius); shape.quadraticCurveTo(-x, -y, -x + radius, -y);
-    return shape;
-  };
+  group.name = 'Stereogram Runner — Chromium pixel runner in front of a stereogram';
+  const layers = new THREE.Group();
+  layers.rotation.y = -0.22;
+  group.add(layers);
+  const paper = enamel('#f5f2e9', 0.68, 0.03);
+  const edge = enamel('#d5d4c9', 0.65, 0.06);
+  const graphite = enamel('#515452', 0.68, 0.02);
+  const ivory = enamel('#fffffa', 0.65, 0);
+  const ground = enamel('#777972', 0.7, 0);
 
-  // The slight separation between two solid panels makes the depth visible in
-  // the resting three-quarter view, without an extra scene or a display stand.
-  const rear = relief(group, roundedPanel(3.1, 1.9, 0.12), rim,
-    'Offset cream rear depth layer', -0.24, 0.07, 0.025, 12);
-  rear.position.set(-0.075, 0.055, -0.24);
-  relief(group, roundedPanel(3.1, 1.9, 0.12), cream,
-    'Slim beveled cream pin-art panel', -0.1, 0.13, 0.03, 12);
+  const board = addMesh(layers, new THREE.BoxGeometry(3.26, 2.06, 0.09), edge,
+    'Thin stereogram backing');
+  board.position.set(0.32, 0.17, -0.62);
+  const mat = addMesh(layers, new THREE.BoxGeometry(3.22, 2.02, 0.035), paper,
+    'Ivory border around the stereogram print');
+  mat.position.set(0.32, 0.17, -0.56);
 
-  // An original continuous running profile: a long balancing tail, raised
-  // tapered head, an open jaw notch, short arms, and two bent hind legs.
-  const rex = new THREE.Shape();
-  rex.moveTo(-1.25, 0.025);
-  rex.bezierCurveTo(-0.96, 0.07, -0.72, 0.21, -0.48, 0.3);
-  rex.bezierCurveTo(-0.24, 0.39, -0.02, 0.37, 0.13, 0.54);
-  rex.quadraticCurveTo(0.18, 0.68, 0.36, 0.7);
-  rex.quadraticCurveTo(0.7, 0.75, 1.07, 0.63);
-  rex.quadraticCurveTo(1.19, 0.6, 1.19, 0.51);
-  rex.lineTo(1.19, 0.405);
-  rex.lineTo(0.7, 0.395);
-  rex.quadraticCurveTo(0.65, 0.36, 0.7, 0.335);
-  rex.lineTo(1.12, 0.3);
-  rex.lineTo(1.075, 0.23);
-  rex.quadraticCurveTo(0.81, 0.19, 0.56, 0.225);
-  rex.quadraticCurveTo(0.43, 0.235, 0.32, 0.175);
-  rex.lineTo(0.48, 0.015);
-  rex.lineTo(0.625, 0.055);
-  rex.lineTo(0.665, -0.035);
-  rex.lineTo(0.48, -0.095);
-  rex.lineTo(0.3, 0.035);
-  rex.quadraticCurveTo(0.24, -0.08, 0.075, -0.19);
-  rex.lineTo(0.285, -0.39);
-  rex.lineTo(0.15, -0.58);
-  rex.lineTo(0.41, -0.615);
-  rex.lineTo(0.44, -0.7);
-  rex.lineTo(0.055, -0.7);
-  rex.lineTo(0.005, -0.605);
-  rex.lineTo(0.105, -0.425);
-  rex.lineTo(-0.175, -0.305);
-  rex.lineTo(-0.285, -0.405);
-  rex.lineTo(-0.54, -0.565);
-  rex.lineTo(-0.42, -0.6);
-  rex.lineTo(-0.445, -0.68);
-  rex.lineTo(-0.72, -0.65);
-  rex.lineTo(-0.695, -0.535);
-  rex.lineTo(-0.48, -0.335);
-  rex.lineTo(-0.545, -0.12);
-  rex.bezierCurveTo(-0.79, -0.055, -1.05, -0.015, -1.25, 0.025);
-  rex.closePath();
-  relief(group, rex, silhouetteGreen, 'Continuous dark forest T-Rex depth silhouette',
-    0.075, 0.06, 0.008, 18);
+  // This image encodes binocular correspondences for the same dinosaur mask.
+  // The source image remains viewable flat, independently of this tilted card.
+  let texture;
+  group.userData.ready = new Promise((resolve, reject) => {
+    texture = new THREE.TextureLoader().load(
+      new URL('./assets/projects/stereogram-texture.png', import.meta.url).href,
+      resolve, undefined, reject,
+    );
+  });
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  const print = addMesh(layers, new THREE.PlaneGeometry(3.08, 1.925),
+    new THREE.MeshBasicMaterial({ map: texture, toneMapped: false }),
+    'Real parallel-view stereogram with a hidden pixel dinosaur');
+  print.position.set(0.32, 0.17, -0.54);
 
-  // Classify the same repeated dot field against the silhouette, raising its
-  // green pins. This is a tactile stereogram motif, not a calibrated illusion.
-  const contour = rex.getPoints(24);
-  const inside = (x, y) => {
-    let contained = false;
-    for (let i = 0, j = contour.length - 1; i < contour.length; j = i++) {
-      const a = contour[i], b = contour[j];
-      if ((a.y > y) !== (b.y > y) && x < (b.x - a.x) * (y - a.y) / (b.y - a.y) + a.x) {
-        contained = !contained;
+  const pixelBox = new THREE.BoxGeometry(1, 1, 1);
+  function pixelRuns(parent, rows, unit, depth, material, name, z) {
+    const runs = [];
+    for (let y = 0; y < rows.length; y++) {
+      for (const match of rows[y].matchAll(/#+/g)) {
+        runs.push({ x: match.index, y, length: match[0].length });
       }
     }
-    return contained;
-  };
-  const pins = fieldMaterials.map(() => []);
-  const raised = [];
-  for (let row = 0; row < 24; row++) {
-    for (let column = 0; column < 43; column++) {
-      const x = (column - 21) * 0.065;
-      const y = (row - 11.5) * 0.065;
-      if (inside(x, y)) {
-        raised.push({ x, y, height: 0.12, base: 0.135 });
-      } else {
-        // A quiet six-column repeat gives the field horizontal correspondence.
-        const motif = (row * 5 + column % 6 * 3) % 17;
-        const color = motif === 1 ? 1 : motif === 8 ? 2 : motif === 13 ? 3 : 0;
-        pins[color].push({ x, y, height: 0.034, base: 0.064 });
-      }
-    }
-  }
-  const profile = [
-    [0, -0.5], [0.73, -0.5], [0.94, -0.42], [1, -0.25],
-    [1, 0.25], [0.94, 0.42], [0.73, 0.5], [0, 0.5],
-  ].map(([radius, y]) => new THREE.Vector2(radius, y));
-  const pinGeometry = new THREE.LatheGeometry(profile, 12);
-  const pinRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2);
-  const addPins = (positions, material, name, radius = 0.022) => {
-    const instances = new THREE.InstancedMesh(pinGeometry, material, positions.length);
-    instances.name = name;
-    instances.castShadow = true;
-    instances.receiveShadow = true;
+    const mesh = new THREE.InstancedMesh(pixelBox, material, runs.length);
+    mesh.name = name;
     const matrix = new THREE.Matrix4();
-    positions.forEach(({ x, y, height, base }, i) => {
-      matrix.compose(new THREE.Vector3(x, y, base + height / 2), pinRotation,
-        new THREE.Vector3(radius, height, radius));
-      instances.setMatrixAt(i, matrix);
+    const rotation = new THREE.Quaternion();
+    runs.forEach(({x, y, length}, i) => {
+      matrix.compose(
+        new THREE.Vector3((x + length / 2 - rows[0].length / 2) * unit,
+          (rows.length / 2 - y - 0.5) * unit, z),
+        rotation, new THREE.Vector3(length * unit, unit, depth),
+      );
+      mesh.setMatrixAt(i, matrix);
     });
-    instances.instanceMatrix.needsUpdate = true;
-    group.add(instances);
-  };
-  pins.forEach((positions, i) => addPins(positions, fieldMaterials[i], 'Low repeated stereogram enamel pins'));
-  addPins(raised, pinGreen, 'Raised forest-green pins forming the running T-Rex');
-  addPins([
-    { x: -0.13, y: 0.862, height: 0.024, base: 0.055 },
-    { x: 0.13, y: 0.862, height: 0.024, base: 0.055 },
-  ], silhouetteGreen, 'Two subtle parallel-view alignment dots', 0.017);
-  // Keep a restrained three-quarter pose beneath the shared viewer tilt, so
-  // the frame thickness and raised pins remain visible before interaction.
-  const presentation = new THREE.Matrix4().makeRotationY(-Math.PI / 15);
-  group.children.forEach(part => part.applyMatrix4(presentation));
+    mesh.instanceMatrix.needsUpdate = true;
+    parent.add(mesh);
+    return mesh;
+  }
+  function border(rows) {
+    const output = Array.from({length: rows.length + 2}, () => Array(rows[0].length + 2).fill('.'));
+    rows.forEach((row, y) => [...row].forEach((pixel, x) => {
+      if (pixel !== '#') return;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+        output[y + dy + 1][x + dx + 1] = '#';
+      }
+    }));
+    return output.map(row => row.join(''));
+  }
+  function sprite(rows, unit, x, y, name) {
+    const object = new THREE.Group();
+    object.name = name;
+    object.position.set(x, y, 0.62);
+    pixelRuns(object, border(rows), unit, 0.065, ivory, `${name} ivory edge`, -0.105);
+    pixelRuns(object, rows, unit, 0.15, graphite, `${name} exact pixel silhouette`, 0);
+    layers.add(object);
+    return object;
+  }
+  const rex = sprite(CHROME_TREX, 0.038, -0.75, -0.08, 'Chrome runner T-Rex');
+  // Preserve the sprite's small square eye as ivory rather than a view through it.
+  const eye = addMesh(rex, new THREE.BoxGeometry(0.076, 0.076, 0.15), ivory, 'Square dinosaur eye');
+  eye.position.set((27 - 22) * 0.038, (23.5 - 6) * 0.038, 0);
+  sprite(CHROME_CACTUS, 0.028, 0.62, -0.47, 'Chrome runner cactus');
+
+  const horizon = addMesh(layers, new THREE.BoxGeometry(2.95, 0.018, 0.08), ground,
+    'Pixel runner ground line');
+  horizon.position.set(-0.18, -0.94, 0.62);
+  [[-1.43, 0.13], [-1.06, 0.07], [-0.47, 0.1], [0.16, 0.08], [0.9, 0.12]].forEach(([x, width], i) => {
+    const dash = addMesh(layers, new THREE.BoxGeometry(width, 0.018, 0.055), ground,
+      'Small pixel ground dash');
+    dash.position.set(x, -1.015 - (i % 2) * 0.04, 0.62);
+  });
   return group;
 }

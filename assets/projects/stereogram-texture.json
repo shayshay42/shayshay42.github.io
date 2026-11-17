@@ -1,0 +1,47 @@
+{
+  "width": 1200,
+  "height": 750,
+  "seed": 4242,
+  "parallelView": true,
+  "farSpacingPixels": 150,
+  "foregroundSpacingPixels": 128,
+  "strength": 0.32,
+  "foregroundDepth": 0.8,
+  "mask": "chrome-runner-mask.js",
+  "maskSha256": "763931a7eebd5519709a66c0f152300db23d60bb6a4190a397d45c7fd9362811",
+  "maskScale": 10,
+  "maskPosition": [
+    380,
+    140
+  ],
+  "algorithm": "TIW symmetric scanline constraints with hidden-surface removal; adapted from Stereogram Runner lib/stereogram.ts.",
+  "reference": "https://harold.thimbleby.net/sirds/ieee3d.pdf",
+  "texture": "Original procedural periodic value noise with warped contour veins and per-class grain. No external texture image.",
+  "subjectAttribution": "Chromium offline runner T-Rex. See chrome-runner-source.md and CHROMIUM-LICENSE.txt.",
+  "verification": {
+    "exactVisibleCorrespondences": 766560,
+    "foregroundPairs": 72600,
+    "backgroundPairs": 693960,
+    "deterministicPixels": true,
+    "periodChecks": {
+      "background": {
+        "samples": 10800,
+        "expectedPeriod": 150,
+        "otherPeriod": 128,
+        "expectedPeriodMatch": 1,
+        "otherPeriodMatch": 0
+      },
+      "foreground": {
+        "samples": 1050,
+        "expectedPeriod": 128,
+        "otherPeriod": 150,
+        "expectedPeriodMatch": 1,
+        "otherPeriodMatch": 0
+      }
+    }
+  },
+  "generated": {
+    "stereogram-texture.png": "5b46b98f21bca6ce48691ad85856f758087620530d25c4fd66def4cfc6111707",
+    "stereogram-depth.png": "4494fcbf6344aede9011c80da6d6e597361dfdb09f37da1b5139f361c4d6914a"
+  }
+}

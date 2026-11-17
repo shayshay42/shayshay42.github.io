@@ -70,6 +70,7 @@ function mountLogo(host) {
   let frame = 0;
   let visible = true;
   let lost = false;
+  let assetsReady = !model.userData.ready;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const link = host.closest('.project-link');
 
@@ -125,14 +126,28 @@ function mountLogo(host) {
     environment = createEnvironment();
     scene.environment = environment.texture;
     lost = false;
-    canvas.hidden = false;
-    host.classList.add('is-ready');
+    canvas.hidden = !assetsReady;
+    host.classList.toggle('is-ready', assetsReady);
     requestRender();
   });
   new ResizeObserver(resize).observe(host);
   new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) requestRender(); }).observe(host);
   resize();
-  renderer.render(scene, camera);
+  canvas.hidden = !assetsReady;
   host.append(canvas);
-  host.classList.add('is-ready');
+  function reveal() {
+    assetsReady = true;
+    if (lost) return;
+    renderer.render(scene, camera);
+    canvas.hidden = false;
+    host.classList.add('is-ready');
+  }
+  if (model.userData.ready) {
+    model.userData.ready.then(reveal).catch(error => {
+      lost = true;
+      canvas.hidden = true;
+      host.classList.remove('is-ready');
+      console.warn('Using the project logo preview.', error);
+    });
+  } else reveal();
 }
