@@ -408,7 +408,7 @@ var LaserProcessor = class extends AudioWorkletProcessor {
             this.sim = new Simulator(this.config, sampleRate);
             this.replay = null;
             this.playing = true;
-            this.port.postMessage({ type: "started", mode: this.mode, frame: this.sim.getFrame() });
+            this.port.postMessage({ type: "started", mode: this.mode, generation: message.generation, frame: this.sim.getFrame() });
             break;
           }
           case "replay": {
@@ -507,7 +507,8 @@ var LaserProcessor = class extends AudioWorkletProcessor {
       hits,
       lastFrame: this.blocks[this.blocks.length - 1].lastFrame
     };
-    const recorded = this.recording ? input : void 0;
+    const recorded = this.recording ? input.subarray(0, sampleRate * 60 - this.recordCount) : void 0;
+    if (recorded) this.recordCount += recorded.length;
     this.port.postMessage({
       type: "trace",
       block,
@@ -539,7 +540,7 @@ var LaserProcessor = class extends AudioWorkletProcessor {
         this.position = start + count;
       } else {
         for (let i = 0; i < input.length; i++) {
-          if (this.mode === "mic") {
+          if (this.mode === "mic" || this.mode === "strudel") {
             const channels = inputs[0] ?? [];
             let sum = 0;
             for (const channel of channels) sum += channel[i] ?? 0;
@@ -571,12 +572,11 @@ var LaserProcessor = class extends AudioWorkletProcessor {
         this.blocks.push(block);
         this.inputBlocks.push(actual);
         this.queued += count;
-        if (this.recording) this.recordCount += count;
         if (this.audible && this.mode !== "mic") {
           for (let i = 0; i < count; i++) output[i] = Math.max(-1, Math.min(1, input[i])) * 0.5;
         }
         if (this.queued >= 1024) this.flush();
-        if (this.recording && this.recordCount >= sampleRate * 60) this.finishRecording();
+        if (this.recording && this.recordCount + this.queued >= sampleRate * 60) this.finishRecording();
       }
       if (count < input.length || this.mode === "replay" && this.replay?.done) {
         this.finishRecording();

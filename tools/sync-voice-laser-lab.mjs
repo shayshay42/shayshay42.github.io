@@ -32,7 +32,7 @@ try {oldAssets = await readdir(path.join(destination, 'assets'));} catch (error)
 await cp(output, destination, {recursive: true});
 await writeFile(path.join(destination, 'index.html'), addSiteAnalytics(html));
 for (const name of oldAssets) {
-  if (/^index-[\w-]+\.(?:js|css)$/.test(name) && !newAssets.has(name)) {
+  if (/^(?:index|strudel)-[\w-]+\.(?:js|css)$/.test(name) && !newAssets.has(name)) {
     await rm(path.join(destination, 'assets', name));
   }
 }

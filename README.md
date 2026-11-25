@@ -182,6 +182,10 @@ the visitor's browser. Microphone input requires HTTPS and permission; demo tone
 and files work without microphone access. This is an uncalibrated simulation,
 not a physical laser controller or calibrated acoustic measurement.
 
+Choose **Strudel** to live-code the sound that drives the laser. The optional **Piano melody (online)** preset loads piano samples when played. The lab footer links to the [corresponding source ZIP](projects/voice-laser-lab/source.zip) and [AGPL-3.0-or-later license](projects/voice-laser-lab/LICENSE.txt) for the application code.
+
+The **Draw a sound** link opens the inverse solver. Visitors can draw, select an outline from an image, download a fitted mono WAV or target coordinates, and replay the waveform through the same simulator.
+
 The source project retains its Sites/Vinext build and has a separate
 `npm run build:pages` export. The website contains only `dist-pages/` output,
 with relative asset paths, model attribution, CC0 text, and third-party notices.
