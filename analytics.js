@@ -51,6 +51,7 @@
     'mol-cgl': 'Open Molecular Game of Life',
     readtheroom: 'Open Read the Room',
     rizome: 'Open Rizome Biotech',
+    cliqity: 'Open Finch by Cliqity',
   };
 
   function trackLink(event) {

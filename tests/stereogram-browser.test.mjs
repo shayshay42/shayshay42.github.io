@@ -29,7 +29,7 @@ test('Stereogram Runner project and nested app', async t => {
       const requests=[];
       page.on('request', request => {if(request.url().startsWith(app)) requests.push(request.url());});
       await page.goto(base);
-      assert.equal(await page.locator('.project-card').count(),5);
+      assert.equal(await page.locator('.project-card').count(),6);
       const logo=page.locator(selector), link=page.locator('.project-link').filter({has:logo});
       await logo.scrollIntoViewIfNeeded();
       await page.waitForSelector(`${selector}.is-ready canvas`);

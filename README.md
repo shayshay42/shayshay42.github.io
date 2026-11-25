@@ -95,7 +95,7 @@ Custom events use fixed names:
 | Action | Event |
 | --- | --- |
 | English or French CV link | `CV English`, `CV French` |
-| Project card | `Open Voice Laser Lab`, `Open Stereogram Runner`, `Open Molecular Game of Life`, `Open Read the Room`, `Open Rizome Biotech` |
+| Project card | `Open Voice Laser Lab`, `Open Stereogram Runner`, `Open Molecular Game of Life`, `Open Read the Room`, `Open Rizome Biotech`, `Open Finch by Cliqity` |
 | First successful playground start per page load | `Start Voice Laser Lab`, `Start Stereogram Runner`, `Start Molecular Game of Life` |
 
 CV events count link clicks, not completed downloads. Start events also work with
@@ -164,9 +164,11 @@ The shared navigation links to Notes, Projects, Publications ([scholar](https://
 
 ## Project cards
 
-The homepage Projects section lists [Voice Laser Lab](projects/voice-laser-lab/), [Stereogram Runner](projects/stereogram-runner/), [Molecular Game of Life](projects/molecular-game-of-life/), [Read the Room](https://readtheroom.site/), and [Rizome Biotech](https://www.rizomebiotech.ai/), in that order. Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
+The homepage Projects section lists [Voice Laser Lab](projects/voice-laser-lab/), [Stereogram Runner](projects/stereogram-runner/), [Molecular Game of Life](projects/molecular-game-of-life/), [Read the Room](https://readtheroom.site/), [Rizome Biotech](https://www.rizomebiotech.ai/), and [Finch by Cliqity](https://cliqity.org/), in that order. Read the Room also links to [Soud Al Kharusi's development story](https://soudkharusi.com/projects/readtheroom-app/). External card descriptions follow those project websites.
 
 The logos use real geometry: Read the Room's chameleon, Rizome's branching medallion, and a molecular glider. Voice Laser Lab has a cream board with a raised Lissajous trace and one direct laser beam. Small mouth, music-note, and megaphone icons sit beside it. Stereogram Runner places an extruded pixel dinosaur and cactus in front of a separate stereogram print. Its pixel masks come from Chromium's offline runner, with the BSD license and source record in `assets/projects/`. The rear image encodes the same dinosaur as a parallel-view stereogram. The external brand references are the sites' [chameleon mark](https://readtheroom.site/images/RTR-logo_Aug2025.png) and [Rizome mark](https://www.rizomebiotech.ai/favicon.png).
+
+The Finch card loads a local mesh with the original wire crossings, beak, and separate eye. It uses a polished gunmetal finish on the notebook’s cream background. [Cliqity’s original glass model](https://cliqity.org/media/finch.glb)
 
 Cards are ordinary links with decorative 3D views. The scenes initialize near the viewport, tilt with the pointer or keyboard focus, and remain still when idle or when reduced motion is requested. Touch gestures retain normal link and page scrolling behavior. Local PNGs preserve the appearance when JavaScript or WebGL is unavailable. The Stereogram Runner card also keeps its fallback visible until its texture loads, or if that load fails. Brand colors stay fixed when the notebook enamel changes. Re-render the previews if the geometry or lighting changes.
 
@@ -210,7 +212,7 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs BROWSER_CHANNEL=chrome node tool
 ```
 
 The helper renders a 720×440 still through the actual card viewer. The same helper
-accepts `readtheroom`, `rizome`, `mol-cgl`, and `stereogram-runner` when their geometry changes.
+accepts `readtheroom`, `rizome`, `mol-cgl`, `stereogram-runner`, and `cliqity` when their geometry changes.
 
 With a local server running, the browser checks cover the Voice Laser Lab card, keyboard
 navigation, reduced motion, PNG fallbacks, nested app assets, and demo playback:

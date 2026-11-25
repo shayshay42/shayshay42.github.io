@@ -6,7 +6,7 @@ const base = (process.env.BASE_URL || 'http://127.0.0.1:4173').replace(/\/$/, ''
 const app = `${base}/projects/voice-laser-lab/`;
 const selector = '[data-project="voice-laser-lab"]';
 
-test('Voice Laser Lab project and static app', async t => {
+test('homepage project cards and Voice Laser Lab', async t => {
   const browser = await chromium.launch({
     channel: process.env.BROWSER_CHANNEL || undefined, headless: true,
     args: ['--enable-unsafe-swiftshader'],
@@ -30,7 +30,6 @@ test('Voice Laser Lab project and static app', async t => {
       const appRequests = [];
       page.on('request', request => { if (request.url().startsWith(app)) appRequests.push(request.url()); });
       await page.goto(base);
-      assert.equal(await page.locator('.project-card').count(), 5);
       const logo = page.locator(selector), link = page.locator('.project-link').filter({has: logo});
       await logo.scrollIntoViewIfNeeded();
       await page.waitForSelector(`${selector}.is-ready canvas`);
@@ -55,6 +54,25 @@ test('Voice Laser Lab project and static app', async t => {
       await page.close();
     });
 
+    await t.test('Cliqity follows Rizome and opens from its 3D project card', async () => {
+      const page = await browser.newPage();
+      await page.goto(base);
+      const order = await page.locator('.project-card [data-project]').evaluateAll(logos => logos.map(logo => logo.dataset.project));
+      assert.deepEqual(order, ['voice-laser-lab', 'stereogram-runner', 'mol-cgl', 'readtheroom', 'rizome', 'cliqity']);
+      const link = page.getByRole('link', {name: 'Finch by Cliqity', exact: true});
+      await link.scrollIntoViewIfNeeded();
+      await link.locator('[data-project="cliqity"].is-ready canvas').waitFor();
+      // Exercise the external link without contacting the project website.
+      const destination = 'https://cliqity.org/';
+      await page.context().route(destination, route => route.fulfill({contentType: 'text/html', body: '<title>Finch by Cliqity</title>'}));
+      await link.focus();
+      await Promise.all([
+        page.context().waitForEvent('response', response => response.url() === destination && response.request().isNavigationRequest()),
+        page.keyboard.press('Enter'),
+      ]);
+      await page.close();
+    });
+
     await t.test('PNG fallback and project link survive disabled WebGL or JavaScript', async () => {
       for (const noJs of [false, true]) {
         const context = await browser.newContext({javaScriptEnabled: !noJs, viewport: {width:390,height:844}});
@@ -75,6 +93,15 @@ test('Voice Laser Lab project and static app', async t => {
         assert.equal(await logo.locator('img').isVisible(), true);
         assert.equal(await logo.locator('canvas').count(), 0);
         assert.equal(await page.locator('.project-link').filter({has: logo}).getAttribute('href'), 'projects/voice-laser-lab/');
+        const cliqity = page.getByRole('link', {name: 'Finch by Cliqity', exact: true});
+        await cliqity.scrollIntoViewIfNeeded();
+        const finch = cliqity.locator('img');
+        assert.equal(await cliqity.getAttribute('href'), 'https://cliqity.org/');
+        assert.equal(await finch.getAttribute('src'), 'assets/projects/cliqity.png');
+        await finch.evaluate(image => image.decode());
+        assert.equal(await finch.isVisible(), true);
+        assert.deepEqual(await finch.evaluate(image => [image.naturalWidth, image.naturalHeight]), [720,440]);
+        assert.equal(await cliqity.locator('canvas').count(), 0);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
         if (noJs) {
           await page.locator('.project-link').filter({has: logo}).click();

@@ -9,6 +9,7 @@ export function createProjectLogo(kind) {
   if (kind === 'mol-cgl') return createMolecularLife();
   if (kind === 'voice-laser-lab') return createVoiceLaserLab();
   if (kind === 'stereogram-runner') return createStereogramRunner();
+  if (kind === 'cliqity') return createFinch();
   throw new Error(`Unknown project logo: ${kind}`);
 }
 
@@ -23,6 +24,18 @@ function addMesh(group, geometry, material, name) {
   mesh.receiveShadow = true;
   group.add(mesh);
   return mesh;
+}
+
+function createFinch() {
+  const group = new THREE.Group();
+  group.name = 'Finch by Cliqity';
+  const url = new URL('./assets/projects/finch-wire.json', import.meta.url);
+  group.userData.ready = new THREE.BufferGeometryLoader().loadAsync(url.href).then(geometry => {
+    geometry.center();
+    const wire = addMesh(group, geometry, enamel('#545f70', 0.17, 0.86), 'Finch wire and eye');
+    wire.scale.setScalar(0.94);
+  });
+  return group;
 }
 
 function relief(group, shape, material, name, z, depth, bevel = 0.018, curveSegments = 14) {

@@ -116,12 +116,14 @@ test('site analytics integration', { timeout: 120_000 }, async t => {
           ['mol-cgl', 'Open Molecular Game of Life'],
           ['readtheroom', 'Open Read the Room'],
           ['rizome', 'Open Rizome Biotech'],
+          ['cliqity', 'Open Finch by Cliqity'],
         ];
         for (const [kind] of projectNames) {
           await page.locator('.project-link').filter({ has: page.locator(`[data-project="${kind}"]`) }).evaluate(link => link.click());
         }
-        assert.deepEqual(await calls(page), ['CV English', 'CV French', ...projectNames.map(([, name]) => name)].map(name => [name]));
-        assert.deepEqual(await page.evaluate(() => window.__defaultPrevented), Array(7).fill(false));
+        const events = ['CV English', 'CV French', ...projectNames.map(([, name]) => name)];
+        assert.deepEqual(await calls(page), events.map(name => [name]));
+        assert.deepEqual(await page.evaluate(() => window.__defaultPrevented), events.map(() => false));
         assert.deepEqual(errors, []);
       } finally { await context.close(); }
     });
