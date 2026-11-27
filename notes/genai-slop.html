@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GenAI Slop (in the dynamical systems sense)</title>
+  <style>
+    body {
+      margin: 0;
+      padding: clamp(20px, 3.5vw, 48px);
+      background: #fff;
+      color: #30382f;
+    }
+    h1 {
+      margin: 0;
+      font: 400 18px/1.55 ui-monospace, "SFMono-Regular", Consolas, monospace;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    h1::after {
+      content: "";
+      display: inline-block;
+      width: 5px;
+      height: 1em;
+      margin-left: 1px;
+      vertical-align: -0.14em;
+      border-block: 1px solid currentColor;
+      background: linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      h1.waiting::after { animation: blink 1.05s step-end infinite; }
+      @keyframes blink { 50% { opacity: 0; } }
+    }
+  </style>
+  <script src="../analytics.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1><span>GenAI Slop (in the dynamical systems sense)</span></h1>
+  </main>
+  <script>
+    const line = document.querySelector('h1');
+    const text = line.querySelector('span');
+    const phrase = text.textContent;
+    const aside = phrase.indexOf(' (');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let length = 0;
+    let erasing = false;
+    let timer;
+
+    // Keep one stable heading for screen readers as the visible letters change.
+    line.setAttribute('aria-label', phrase);
+    text.setAttribute('aria-hidden', 'true');
+
+    function schedule(delay, waiting = false) {
+      line.classList.toggle('waiting', waiting);
+      timer = setTimeout(type, delay);
+    }
+
+    function type() {
+      length += erasing ? -1 : 1;
+      text.textContent = phrase.slice(0, length);
+      if (length === phrase.length) {
+        erasing = true;
+        schedule(1850, true);
+      } else if (length === 0) {
+        erasing = false;
+        schedule(1300, true);
+      } else if (length === aside) {
+        schedule(erasing ? 800 : 680, true);
+      } else {
+        schedule(erasing ? 34 + Math.random() * 24 : 65 + Math.random() * 85);
+      }
+    }
+
+    function syncAnimation() {
+      clearTimeout(timer);
+      if (reducedMotion.matches) {
+        text.textContent = phrase;
+        line.classList.remove('waiting');
+      } else {
+        text.textContent = phrase.slice(0, length);
+        if (!document.hidden) schedule(1050, true);
+      }
+    }
+    reducedMotion.addEventListener('change', syncAnimation);
+    document.addEventListener('visibilitychange', syncAnimation);
+    syncAnimation();
+  </script>
+</body>
+</html>

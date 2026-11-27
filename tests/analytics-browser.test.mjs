@@ -10,6 +10,7 @@ const websiteId = '42412014-5b93-4857-9db8-9bb357a3c29b';
 const pages = [
   'index.html',
   'notes/weighted-weak-lorenz.html',
+  'notes/genai-slop.html',
   'notes/oil-and-learned-optimization.html',
   'notes/steering-a-forecasting-model.html',
   'projects/molecular-game-of-life/index.html',
